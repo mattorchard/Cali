@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -63,16 +64,26 @@ public class MainActivity extends AppCompatActivity
 
 
         //ListView
+        Course ui = new Course("UI", R.color.courseColor3, R.color.courseColor3a);
+        Course networking = new Course("Networking", R.color.courseColor1, R.color.courseColor1a);
         Calendar calendar = Calendar.getInstance();
         calendar.set(117, 6, 15);
         Assignment[] assignments = new Assignment[]{
-                new Assignment("UI Lab", 75, new Date(1500566400)),
-                new Assignment("Networking Assignment", 30, new Date(1500998400)),
-                new Assignment("Random #3", 0 , calendar.getTime())
+                new Assignment(ui, "Lab", 75, new Date(1500566400)),
+                new Assignment(networking, "Assignment", 30, new Date(1500998400)),
+                new Assignment(ui, "Random #3", 10 , calendar.getTime())
         };
+        //ListView
         ArrayAdapter adapter = new AssignmentListAdapter(this, assignments);
         ListView summaryListView = (ListView)findViewById(R.id.summaryListViewMain);
         summaryListView.setAdapter(adapter);
+        summaryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                Assignment item = (Assignment)parent.getItemAtPosition(position);
+                Toast.makeText(getBaseContext(), item.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

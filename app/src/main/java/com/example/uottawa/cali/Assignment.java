@@ -10,8 +10,10 @@ public class Assignment implements Serializable {
     private String title;
     private int complete;
     private Date dueDate;
+    private Course course;
 
-    public Assignment(String title, int complete, Date dueDate) {//Convenience constructor should be removed post-testing
+    public Assignment(Course course, String title, int complete, Date dueDate) {//Convenience constructor should be removed post-testing
+        this.course = course;
         this.title = title;
         this.complete = complete;
         this.dueDate = dueDate;
@@ -21,11 +23,15 @@ public class Assignment implements Serializable {
         return complete;
     }
 
-   public String getTitle() {
+    public String getName() {
        return title;
    }
 
-   public String getDateString() {
+    public String getDateString() {
        return dateFormat.format(dueDate);
    }
+
+    public Course getCourse() {
+       return course;
+    }
 }

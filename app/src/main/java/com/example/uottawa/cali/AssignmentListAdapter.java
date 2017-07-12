@@ -27,7 +27,7 @@ public class AssignmentListAdapter extends ArrayAdapter {
 
 
         TextView title = (TextView)rowView.findViewById(R.id.assignmentTitleTextViewListElement);
-        title.setText(assignment.getTitle());
+        title.setText(assignment.getName());
 
         TextView dueDate = (TextView)rowView.findViewById(R.id.assignmentDateTextViewListElement);
         dueDate.setText(assignment.getDateString());
@@ -35,7 +35,9 @@ public class AssignmentListAdapter extends ArrayAdapter {
         View progress = (View)rowView.findViewById(R.id.assignmentProgressViewListElement);
         View progressInverse = (View)rowView.findViewById(R.id.assignmentProgressInverseViewListElement);
         progress.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, assignment.getComplete()));
+        progress.setBackgroundResource(assignment.getCourse().getColorIndex());
         progressInverse.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 100 - assignment.getComplete()));
+        progressInverse.setBackgroundResource(assignment.getCourse().getColorInverseIndex());
         return rowView;
     }
 }
