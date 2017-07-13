@@ -27,7 +27,8 @@ public class AssignmentListAdapter extends ArrayAdapter {
 
 
         TextView title = (TextView)rowView.findViewById(R.id.assignmentTitleTextViewListElement);
-        title.setText(assignment.getName());
+
+        title.setText(assignment.getCourse().getName() + ": " +assignment.getName());
 
         TextView dueDate = (TextView)rowView.findViewById(R.id.assignmentDateTextViewListElement);
         dueDate.setText(assignment.getDateString());

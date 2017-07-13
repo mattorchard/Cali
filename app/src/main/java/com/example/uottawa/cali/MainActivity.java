@@ -30,6 +30,8 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    static final int ASSIGNMENT_REQUEST = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +83,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 Assignment item = (Assignment)parent.getItemAtPosition(position);
+                Intent intent = new Intent(getBaseContext(), AssignmentActivity.class);
+                startActivityForResult(intent, ASSIGNMENT_REQUEST);
                 Toast.makeText(getBaseContext(), item.getName(), Toast.LENGTH_SHORT).show();
             }
         });
