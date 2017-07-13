@@ -56,11 +56,11 @@ public class MainActivity extends AppCompatActivity
         };
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        /*NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         Menu courseMenu = navigationView.getMenu();
         courseMenu.add("Algebra");
-        courseMenu.add("Notifications");
+        courseMenu.add("Notifications");*/
 
 
         //ListView
@@ -84,6 +84,17 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getBaseContext(), item.getName(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        //Drawer layout ListView
+        Course[] courses = new Course[] {
+                ui,
+                new Course("CEG", R.color.colorPrimary, R.color.courseColor8a),
+                new Course("OS", R.color.courseColor7a, R.color.courseColor3)
+        };
+        ArrayAdapter drawerAdapter = new DrawerListAdapter(this, courses);
+        ListView drawerListView = (ListView)findViewById(R.id.drawerlist);
+        drawerListView.setAdapter(drawerAdapter);
+
     }
 
     @Override
@@ -139,52 +150,12 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         } else if (title == "Notifications"){
-            sendNotification();
+            Intent intent = new Intent("com.example.uottawa.cali.Test");
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void sendNotification() {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_menu_camera)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
-        // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(this, MainActivity.class);
-
-        // The stack builder object will contain an artificial back stack for the
-        // started Activity.
-        // This ensures that navigating backward from the Activity leads out of
-        // your application to the Home screen.
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(MainActivity.class);
-        // Adds the Intent that starts the Activity to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManagerCompat mNotificationManager =
-                NotificationManagerCompat.from(getApplicationContext());
-
-        //Building the notification
-        Notification notification = new NotificationCompat.Builder(this)
-                .setContentTitle("I'm a title")
-                .setContentText("Some text")
-                .setSmallIcon(R.drawable.ic_menu_camera)
-                .setContentIntent(resultPendingIntent)
-                .build();
-
-        // mNotificationId is a unique integer your app uses to identify the
-        // notification. For example, to cancel the notification, you can pass its ID
-        // number to NotificationManager.cancel().
-        mNotificationManager.notify(null, 0, notification);
     }
 }

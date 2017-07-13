@@ -6,12 +6,12 @@
     <TableRow>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/view2"
+            android:id="@+id/colorCircle"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_vertical"
-            android:backgroundTint="@color/courseColor4"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:elevation="12dp"
             android:innerRadius="0dp"
             android:shape="ring"
