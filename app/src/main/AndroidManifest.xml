@@ -19,7 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AssignmentActivity" android:windowSoftInputMode="stateHidden"></activity>
+        <activity android:name=".AssignmentActivity"
+
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+
+            />
         <activity android:name=".Test">
             <intent-filter>
                 <action android:name="com.example.uottawa.cali.Test" />

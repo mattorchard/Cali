@@ -6,7 +6,9 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="text_heading_1">40sp</dimen>
-    <dimen name="text_heading_2">30sp</dimen>
-    <dimen name="text_paragraph">20sp</dimen>
+    <dimen name="padding_divider_assignment">10dp</dimen>
+
+    <dimen name="text_heading_1">30sp</dimen>
+    <dimen name="text_heading_2">20sp</dimen>
+    <dimen name="text_paragraph">17sp</dimen>
 </resources>

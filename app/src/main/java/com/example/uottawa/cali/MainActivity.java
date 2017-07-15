@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                Toast.makeText(getBaseContext(), "Opened me", Toast.LENGTH_SHORT).show();
+                //Maybe something needs to happen here
             }
         };
         drawer.setDrawerListener(toggle);
@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity
                 Assignment item = (Assignment)parent.getItemAtPosition(position);
                 Intent intent = new Intent(getBaseContext(), AssignmentActivity.class);
                 startActivityForResult(intent, ASSIGNMENT_REQUEST);
-                Toast.makeText(getBaseContext(), item.getName(), Toast.LENGTH_SHORT).show();
             }
         });
 

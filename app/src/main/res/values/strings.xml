@@ -6,10 +6,23 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="complete_header_assignment">Complete: </string>
-    <string name="due_header_assignment">Due: </string>
-    <string name="priority_header_assignment">Priority: </string>
-    <string name="type_header_assignment">Type: </string>
+    <string name="name_header_assignment">Assignment Name</string>
+    <string name="complete_header_assignment">Complete:</string>
+    <string name="due_header_assignment">Due:</string>
+    <string name="priority_header_assignment">Priority:</string>
+    <string name="type_header_assignment">Type:</string>
+    <string name="description_hint_assignment">Assignment description</string>
+
+    <string name="title_type_dialog">Select an assignment type:</string>
+
+
+    <string name="unset_assignment_type">None</string>
+    <string name="lab_report_assignment_type">Lab report</string>
+    <string name="paper_assignment_type">Paper</string>
+    <string name="group_work_assignment_type">Group work</string>
+    <string name="problem_set_assignment_type">Problem set</string>
+    <string name="deliverable_assignment_type">Deliverable</string>
+
 
     <string name="dynamic_text_unset">Unset</string>
     <string name="lorem_long">
