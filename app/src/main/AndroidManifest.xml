@@ -32,6 +32,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <receiver
             android:name=".MyReceiver"
             android:enabled="true"
@@ -42,5 +43,7 @@
             android:exported="false" >
         </service>
     </application>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

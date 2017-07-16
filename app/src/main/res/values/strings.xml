@@ -8,7 +8,7 @@
 
     <!--Assignment activity-->
     <string name="name_header_assignment">Assignment Name</string>
-    <string name="complete_header_assignment">Complete:</string>
+    <string name="complete_header_assignment">Completion:</string>
     <string name="due_header_assignment">Due:</string>
     <string name="priority_header_assignment">Priority:</string>
     <string name="type_header_assignment">Type:</string>
@@ -16,9 +16,9 @@
 
     <!--Save Dialog-->
     <string name="title_save_dialog">Save changes</string>
-    <string name="message_save_dialog">Would you like to save changes made to this assignment</string>
+    <string name="message_save_dialog">Would you like to save changes made to this assignment?</string>
     <string name="positive_save_dialog">Save</string>
-    <string name="negative_save_dialog">Discard changes</string>
+    <string name="negative_save_dialog">Discard</string>
 
     <!--Assignment type-->
     <string name="title_type_dialog">Select an assignment type:</string>
