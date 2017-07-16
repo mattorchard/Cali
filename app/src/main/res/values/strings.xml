@@ -6,6 +6,7 @@
 
     <string name="action_settings">Settings</string>
 
+    <!--Assignment activity-->
     <string name="name_header_assignment">Assignment Name</string>
     <string name="complete_header_assignment">Complete:</string>
     <string name="due_header_assignment">Due:</string>
@@ -13,9 +14,14 @@
     <string name="type_header_assignment">Type:</string>
     <string name="description_hint_assignment">Assignment description</string>
 
+    <!--Save Dialog-->
+    <string name="title_save_dialog">Save changes</string>
+    <string name="message_save_dialog">Would you like to save changes made to this assignment</string>
+    <string name="positive_save_dialog">Save</string>
+    <string name="negative_save_dialog">Discard changes</string>
+
+    <!--Assignment type-->
     <string name="title_type_dialog">Select an assignment type:</string>
-
-
     <string name="unset_assignment_type">None</string>
     <string name="lab_report_assignment_type">Lab report</string>
     <string name="paper_assignment_type">Paper</string>
@@ -23,7 +29,22 @@
     <string name="problem_set_assignment_type">Problem set</string>
     <string name="deliverable_assignment_type">Deliverable</string>
 
+    <!--Intent keys-->
+    <string name="intent_assignment_fresh">intent_assignment_fresh</string>
+    <string name="intent_assignment_operation">intent_assignment_operation</string>
+    <string name="intent_assignment_data_send">intent_assignment_data_send</string>
+    <string name="intent_assignment_data_receive">intent_assignment_data_receive</string>
 
+    <!--File storage-->
+    <string name="preference_file_key">com.example.uottawa.cali.preference_key</string>
+    <string name="assignments_filename">cali_assignments.ser</string>
+    <string name="unused_courses_filename">cali_unused_courses.ser</string>
+
+    <!--Errors-->
+    <string name="error_assignment_parse">Error parsing assignment data</string>
+
+    <!--Misc-->
+    <string name="fresh_assignment_name">New Assignment</string>
     <string name="dynamic_text_unset">Unset</string>
     <string name="lorem_long">
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ac maximus mauris. Sed imperdiet vitae nunc ac consequat. Nullam ultrices urna non magna facilisis semper. Nulla ut mauris vitae leo convallis finibus. Aliquam vitae placerat sapien. Sed id euismod lectus. Vestibulum eu vestibulum dolor. Aliquam convallis urna quis vestibulum feugiat. Cras quam sem, sagittis eget ex vitae, vehicula blandit quam. Praesent bibendum pharetra nibh. Sed vulputate nibh vestibulum, molestie arcu ac, vehicula ligula. Ut auctor eleifend dolor eu placerat. Nam eros quam, vehicula vitae diam at, congue ornare velit. Duis mollis sapien laoreet turpis consectetur, ut mattis nulla pretium.

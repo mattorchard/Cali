@@ -8,6 +8,7 @@
     <color name="textEmphasis">#202020</color>
     <color name="textMediumEmphasis">#404040</color>
 
+    <color name="courseColor0">#5C6068</color>
     <color name="courseColor1">#c62828</color>
     <color name="courseColor2">#6A1B9A</color>
     <color name="courseColor3">#0277BD</color>
@@ -16,6 +17,7 @@
     <color name="courseColor6">#F9A825</color>
     <color name="courseColor7">#D84315</color>
     <color name="courseColor8">#37474F</color>
+    <color name="courseColor0a">#7D848E</color>
     <color name="courseColor1a">#d44d4d</color>
     <color name="courseColor2a">#9744c9</color>
     <color name="courseColor3a">#3897cf</color>

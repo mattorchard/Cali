@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,13 +25,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends IOActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     static final int ASSIGNMENT_REQUEST = 1;
+    private int selectedIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +47,14 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Assignment freshAssignment = new Assignment();
+                freshAssignment.setName(getString(R.string.fresh_assignment_name));
+                assignmentsFile.add(freshAssignment);
+                selectedIndex = assignmentsFile.size() - 1;
+                Intent intent = new Intent(getBaseContext(), AssignmentActivity.class);
+                intent.putExtra(getString(R.string.intent_assignment_data_send), freshAssignment);
+                intent.putExtra(getString(R.string.intent_assignment_fresh), true);
+                startActivityForResult(intent, ASSIGNMENT_REQUEST);
             }
         });
         //Drawer
@@ -58,46 +67,44 @@ public class MainActivity extends AppCompatActivity
         };
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        /*NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        Menu courseMenu = navigationView.getMenu();
-        courseMenu.add("Algebra");
-        courseMenu.add("Notifications");*/
-
 
         //ListView
-        Course ui = new Course("UI", R.color.courseColor3, R.color.courseColor3a);
-        Course networking = new Course("Networking", R.color.courseColor1, R.color.courseColor1a);
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(117, 6, 15);
-        Assignment[] assignments = new Assignment[]{
-                new Assignment(ui, "Lab", 75, new Date(1500566400)),
-                new Assignment(networking, "Assignment", 30, new Date(1500998400)),
-                new Assignment(ui, "Random #3", 10 , calendar.getTime())
-        };
-        //ListView
-        ArrayAdapter adapter = new AssignmentListAdapter(this, assignments);
+        setSampleData();
+        ArrayAdapter summaryListViewAdapter = new AssignmentListAdapter(this, assignmentsFile.toArray(new Assignment[assignmentsFile.size()]));
         ListView summaryListView = (ListView)findViewById(R.id.summaryListViewMain);
-        summaryListView.setAdapter(adapter);
+        summaryListView.setAdapter(summaryListViewAdapter);
         summaryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                selectedIndex = position;
                 Assignment item = (Assignment)parent.getItemAtPosition(position);
                 Intent intent = new Intent(getBaseContext(), AssignmentActivity.class);
+                intent.putExtra(getString(R.string.intent_assignment_data_send), item);
+                intent.putExtra(getString(R.string.intent_assignment_fresh), false);
                 startActivityForResult(intent, ASSIGNMENT_REQUEST);
             }
         });
 
         //Drawer layout ListView
-        Course[] courses = new Course[] {
-                ui,
-                new Course("CEG", R.color.colorPrimary, R.color.courseColor8a),
-                new Course("OS", R.color.courseColor7a, R.color.courseColor3)
-        };
-        ArrayAdapter drawerAdapter = new DrawerListAdapter(this, courses);
+        ArrayAdapter drawerAdapter = new DrawerListAdapter(this, coursesFile.toArray(new Course[coursesFile.size()]));
         ListView drawerListView = (ListView)findViewById(R.id.drawerlist);
         drawerListView.setAdapter(drawerAdapter);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ASSIGNMENT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                FileOperations assignmentOperation = (FileOperations)data.getSerializableExtra(getString(R.string.intent_assignment_operation));
+                if (FileOperations.MODIFY == assignmentOperation) {
+                    assignmentsFile.set(selectedIndex, (Assignment)data.getSerializableExtra(getString(R.string.intent_assignment_data_receive)));
+                    reload();
+                } else if (FileOperations.DELETE == assignmentOperation) {
+                    assignmentsFile.remove(selectedIndex);
+                    reload();
+                }
+            }
+        }
     }
 
     @Override
@@ -160,5 +167,24 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void reload() {
+        ArrayAdapter summaryListViewAdapter = new AssignmentListAdapter(this, assignmentsFile.toArray(new Assignment[assignmentsFile.size()]));
+        ListView summaryListView = (ListView)findViewById(R.id.summaryListViewMain);
+        summaryListView.setAdapter(summaryListViewAdapter);
+    }
+
+    private void setSampleData() {
+        coursesFile = new ArrayList<>();
+        assignmentsFile = new ArrayList<>();
+        coursesFile.add(new Course("Networking", R.color.courseColor1, R.color.courseColor1a));
+        coursesFile.add(new Course("UI Design", R.color.courseColor3, R.color.courseColor3a));
+        Assignment tempAssignment = new Assignment(coursesFile.get(1), "App Presentation", 66, new Date(), 1, AssignmentTypes.GROUP_WORK, "asd");
+        assignmentsFile.add(tempAssignment);
+        tempAssignment = new Assignment(coursesFile.get(0), "Routing Lab #8", 75, new Date(), 2, AssignmentTypes.LAB_REPORT, "dsa");
+        assignmentsFile.add(tempAssignment);
+        tempAssignment = new Assignment(coursesFile.get(1), "Assignment #6", 20, new Date(), 4, AssignmentTypes.PROBLEM_SET, "sad");
+        assignmentsFile.add(tempAssignment);
     }
 }

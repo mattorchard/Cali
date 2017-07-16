@@ -21,7 +21,20 @@ public class Course implements Serializable{
     public int getColorIndex() {
         return colorIndex;
     }
+
     public int getColorInverseIndex() {
         return colorInverseIndex;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setColorIndex(int colorIndex) {
+        this.colorIndex = colorIndex;
+    }
+
+    public void setColorInverseIndex(int colorInverseIndex) {
+        this.colorInverseIndex = colorInverseIndex;
     }
 }

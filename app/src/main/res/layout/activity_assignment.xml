@@ -50,13 +50,14 @@
             android:orientation="vertical"
             android:padding="0dp">
             <LinearLayout
+                android:id="@+id/courseBackgroundAssignment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/courseColor1"
                 android:orientation="horizontal"
                 android:onClick="changeCourse">
                 <TextView
-                    android:id="@+id/courseTextViewActivity"
+                    android:id="@+id/courseTextViewAssignment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/dynamic_text_unset"
@@ -97,6 +98,7 @@
                     android:textSize="@dimen/text_heading_2"
                     android:textColor="@color/textMediumEmphasis"/>
                 <TextView
+                    android:id="@+id/dueTextViewAssignment"
                     android:gravity="end"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -142,7 +144,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_p3"
                         android:background="@android:color/transparent"
-                        android:tint="@color/colorAccent"
+                        android:tint="@color/colorGray"
                         android:onClick="changePriority"/>
                     <ImageButton
                         android:id="@+id/priorityButton4Assignment"
@@ -174,6 +176,7 @@
                     android:textSize="@dimen/text_heading_2"
                     android:textColor="@color/textMediumEmphasis"/>
                 <TextView
+                    android:id="@+id/typeTextViewAssignment"
                     android:onClick="changeType"
                     android:gravity="end"
                     android:layout_width="match_parent"
@@ -183,6 +186,7 @@
                     android:textColor="@color/textMediumEmphasis"/>
             </LinearLayout>
             <EditText
+                android:id="@+id/descriptionEditTextAssignment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_paragraph"

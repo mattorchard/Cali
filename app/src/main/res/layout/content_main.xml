@@ -7,7 +7,12 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.uottawa.cali.MainActivity"
     tools:showIn="@layout/app_bar_main"
-    android:padding="10dp">
+    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="0dp">
 
     <ListView
         android:id="@+id/summaryListViewMain"
