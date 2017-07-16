@@ -6,10 +6,11 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="padding_divider_assignment">10dp</dimen>
+    <dimen name="padding_divider_assignment">15dp</dimen>
 
     <dimen name="text_heading_1">30sp</dimen>
     <dimen name="text_heading_2">20sp</dimen>
+    <dimen name="text_heading_3">18sp</dimen>
     <dimen name="text_paragraph">17sp</dimen>
 
     <dimen name="design_fab_size_normal" tools:override="true">70dp</dimen>

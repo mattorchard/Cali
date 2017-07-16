@@ -1,24 +1,15 @@
 package com.example.uottawa.cali;
 
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,19 +20,20 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends IOActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends IOActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     static final int ASSIGNMENT_REQUEST = 1;
+    static final int SETTINGS_REQUEST = 2;
     private int selectedIndex;
+    private ArrayList<Course> blackList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        blackList = new ArrayList<>();
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,7 +89,12 @@ public class MainActivity extends IOActivity
                 startActivityForResult(intent, ASSIGNMENT_REQUEST);
             }
         });
-
+        summaryListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
+                return true;
+            }
+        });
         //Drawer layout ListView
         ArrayAdapter drawerAdapter = new DrawerListAdapter(this, coursesFile);
         final ListView drawerListView = (ListView)findViewById(R.id.drawerlist);
@@ -124,12 +121,14 @@ public class MainActivity extends IOActivity
                 FileOperations assignmentOperation = (FileOperations)data.getSerializableExtra(getString(R.string.intent_assignment_operation));
                 if (FileOperations.MODIFY == assignmentOperation) {
                     assignmentsFile.set(selectedIndex, (Assignment)data.getSerializableExtra(getString(R.string.intent_assignment_data_receive)));
-                    reload();
+                    reloadAssignments();
                 } else if (FileOperations.DELETE == assignmentOperation) {
                     assignmentsFile.remove(selectedIndex);
-                    reload();
+                    reloadAssignments();
                 }
             }
+        } else if (requestCode == SETTINGS_REQUEST) {
+            reloadAssignments();
         }
     }
 
@@ -152,16 +151,12 @@ public class MainActivity extends IOActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+            startActivityForResult(intent, SETTINGS_REQUEST);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -195,10 +190,59 @@ public class MainActivity extends IOActivity
         return true;
     }
 
-    private void reload() {
+    public void openFilterDialog(View v) {
+        ArrayList<String> courseNames = new ArrayList<>();
+        boolean[] checkList = new boolean[coursesFile.size()];
+        for (int i = 0; i < coursesFile.size(); i ++) {
+            courseNames.add(coursesFile.get(i).getName());
+            checkList[i] = !blackList.contains(coursesFile.get(i));
+        }
+
+        final ArrayList<Integer> changed = new ArrayList<>();
+        final ArrayList<Boolean> state = new ArrayList<>();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(R.string.title_filter_dialog)
+                .setMultiChoiceItems(courseNames.toArray(new String[courseNames.size()]), checkList,
+                        new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                changed.add(which);
+                                state.add(isChecked);
+                            }
+                        })
+                .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        updateFilter(changed, state);
+                    }
+                })
+                .setNegativeButton(R.string.cancel_filter_dialog, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(getBaseContext(), "Wow Clicked cancel", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        builder.create().show();
+    }
+
+    private void reloadAssignments() {
         ArrayAdapter summaryListViewAdapter = new AssignmentListAdapter(this, assignmentsFile.toArray(new Assignment[assignmentsFile.size()]));
         ListView summaryListView = (ListView)findViewById(R.id.summaryListViewMain);
         summaryListView.setAdapter(summaryListViewAdapter);
+    }
+
+    private void updateFilter(ArrayList<Integer> changed, ArrayList<Boolean> state) {
+        for (int i = 0; i < changed.size(); i++) {
+            if (state.get(i)) {
+                blackList.remove(coursesFile.get(changed.get(i)));
+            } else {
+                blackList.add(coursesFile.get(changed.get(i)));
+            }
+        }
+    }
+    private void reloadCourses() {
+        blackList = new ArrayList<>();
     }
 
     private void setSampleData() {
@@ -206,7 +250,7 @@ public class MainActivity extends IOActivity
         assignmentsFile = new ArrayList<>();
         coursesFile.add(new Course("Networking", R.color.courseColor1, R.color.courseColor1a));
         coursesFile.add(new Course("UI Design", R.color.courseColor3, R.color.courseColor3a));
-        coursesFile.add(new Course("UI Interface", R.color.courseColor7, R.color.courseColor8a));
+        coursesFile.add(new Course("Quality Assurance", R.color.courseColor5, R.color.courseColor5a));
         Assignment tempAssignment = new Assignment(coursesFile.get(1), "App Presentation", 66, new Date(), 1, AssignmentTypes.GROUP_WORK, "asd");
         assignmentsFile.add(tempAssignment);
         tempAssignment = new Assignment(coursesFile.get(0), "Routing Lab #8", 75, new Date(), 2, AssignmentTypes.LAB_REPORT, "dsa");

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.uottawa.cali.SettingsActivity"
+    android:padding="15dp"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_heading_1"
+        android:textColor="@color/textEmphasis"
+        android:text="@string/title_settings"/>
+
+    <TextView
+        android:paddingTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_heading_2"
+        android:textColor="@color/textEmphasis"
+        android:text="@string/sort_header_settings"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="50dp"
+        android:paddingStart="50dp"
+        android:orientation="vertical">
+        <CheckBox
+            android:id="@+id/completeCheckBoxSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textMediumEmphasis"
+            android:text="@string/complete_sort_settings"/>
+        <CheckBox
+            android:id="@+id/priorityCheckBoxSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textMediumEmphasis"
+            android:text="@string/priority_sort_settings"/>
+        <CheckBox
+            android:id="@+id/dueCheckBoxSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textMediumEmphasis"
+            android:text="@string/due_sort_settings"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/notification_header_settings"
+        android:textSize="@dimen/text_heading_2"
+        android:textColor="@color/textEmphasis"
+        android:paddingTop="20dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_heading_3"
+            android:textColor="@color/textMediumEmphasis"
+            android:text="@string/daily_notifications_settings"/>
+        <Switch
+            android:id="@+id/dailyNotificationSwitchSettings"
+            android:layout_gravity="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_heading_3"
+            android:textColor="@color/textMediumEmphasis"
+            android:text="@string/upcoming_notifications_settings"/>
+        <Switch
+            android:id="@+id/upcomingNotificationSwitchSettings"
+            android:layout_gravity="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

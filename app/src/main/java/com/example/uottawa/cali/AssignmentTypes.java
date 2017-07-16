@@ -6,7 +6,8 @@ public enum AssignmentTypes {
     PAPER(R.string.paper_assignment_type, R.drawable.ic_attach),
     GROUP_WORK(R.string.group_work_assignment_type, R.drawable.ic_attach),
     PROBLEM_SET(R.string.problem_set_assignment_type, R.drawable.ic_attach),
-    DELIVERABLE(R.string.deliverable_assignment_type, R.drawable.ic_attach);
+    DELIVERABLE(R.string.deliverable_assignment_type, R.drawable.ic_attach),
+    STUDY(R.string.study_assignment_type, R.drawable.ic_attach);
 
     int nameID;
     int imageID;

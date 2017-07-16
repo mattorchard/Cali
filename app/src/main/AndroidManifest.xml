@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.uottawa.cali">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,12 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AssignmentActivity"
-
+        <activity
+            android:name=".AssignmentActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CourseActivity">
             <intent-filter>
                 <action android:name="com.example.uottawa.cali.CourseActivity" />
@@ -36,14 +36,13 @@
         <receiver
             android:name=".MyReceiver"
             android:enabled="true"
-            android:exported="false" >
-        </receiver>
+            android:exported="false" />
+
         <service
             android:name=".NotificationManager"
-            android:exported="false" >
-        </service>
-    </application>
+            android:exported="false" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+        <activity android:name=".SettingsActivity"></activity>
+    </application>
 
 </manifest>
