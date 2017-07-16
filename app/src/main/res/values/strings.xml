@@ -67,4 +67,6 @@ Mauris in cursus mauris. Morbi dapibus pulvinar ex et molestie. Suspendisse elem
 
 Phasellus fermentum id velit eu porta. In aliquet tempus purus vitae sollicitudin. Proin mollis risus metus, in vehicula enim tincidunt eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed iaculis iaculis enim at ullamcorper. Duis eget vehicula neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     </string>
+    <string name="add_course">Add a course</string>
+    <string name="course_name">Course name</string>
 </resources>

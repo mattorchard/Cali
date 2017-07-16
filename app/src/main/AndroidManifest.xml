@@ -25,9 +25,9 @@
             android:theme="@style/AppTheme.NoActionBar"
 
             />
-        <activity android:name=".Test">
+        <activity android:name=".CourseActivity">
             <intent-filter>
-                <action android:name="com.example.uottawa.cali.Test" />
+                <action android:name="com.example.uottawa.cali.CourseActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

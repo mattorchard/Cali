@@ -20,9 +20,9 @@ import java.util.ArrayList;
 public class DrawerListAdapter extends ArrayAdapter {
 
     private Activity context;
-    private Course[] courses;
+    private ArrayList<Course> courses;
 
-    public DrawerListAdapter(Activity context, Course[] courses) {
+    public DrawerListAdapter(Activity context, ArrayList<Course> courses) {
         super(context,R.layout.list_single, courses);
         this.context = context;
         this.courses = courses;
@@ -34,10 +34,10 @@ public class DrawerListAdapter extends ArrayAdapter {
         View rowView = inflater.inflate(R.layout.list_single, null, true);
         TextView courseText = (TextView) rowView.findViewById(R.id.txt);
         CardView colorCircle = (CardView) rowView.findViewById(R.id.colorCircle);
-        int colorIndex = courses[position].getColorIndex();
+        int colorIndex = courses.get(position).getColorIndex();
 
         colorCircle.setBackgroundTintList(context.getResources().getColorStateList(colorIndex));
-        courseText.setText(courses[position].getName());
+        courseText.setText(courses.get(position).getName());
 
         return rowView;
     }
