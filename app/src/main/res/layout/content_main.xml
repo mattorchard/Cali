@@ -23,6 +23,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"/>
+        android:dividerHeight="0dp"/>
 
 </android.support.constraint.ConstraintLayout>

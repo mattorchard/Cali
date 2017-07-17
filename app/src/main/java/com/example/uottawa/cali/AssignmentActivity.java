@@ -117,8 +117,6 @@ public class AssignmentActivity extends AppCompatActivity {
         descriptionEditText.setText(assignment.getDescription());
     }
 
-
-
     @Override
     public void onBackPressed() {
         assignment.setName(nameEditText.getText().toString());
@@ -142,6 +140,12 @@ public class AssignmentActivity extends AppCompatActivity {
                     setResult(RESULT_OK, intent);
                     dialog.dismiss();
                     finish();
+                }
+            });
+            builder.setNeutralButton(getString(R.string.cancel_save_dialog), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                 }
             });
             builder.setNegativeButton(getString(R.string.negative_save_dialog), new DialogInterface.OnClickListener() {
@@ -235,8 +239,21 @@ public class AssignmentActivity extends AppCompatActivity {
     }
 
     public void changeType(View v) {
-        DialogFragment newFragment = new TypeSelectorDialog();
-        newFragment.show(getSupportFragmentManager(), "Change Type");
+        //DialogFragment newFragment = new TypeSelectorDialog();
+        //newFragment.show(getSupportFragmentManager(), "Change Type");
+        String[] typeStrings = new String[AssignmentTypes.values().length];
+        for (int i = 0; i < AssignmentTypes.values().length; i ++) {
+            typeStrings[i] = getString(AssignmentTypes.values()[i].getNameID());
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentActivity.this);
+        builder.setTitle(R.string.title_type_dialog)
+                .setItems(typeStrings, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        assignment.setType(AssignmentTypes.values()[which]);
+                        typeTextView.setText(getString(assignment.getType().getNameID()));
+                    }
+                });
+        builder.create().show();
     }
 
     public void enableEditText(View v) {
@@ -245,6 +262,30 @@ public class AssignmentActivity extends AppCompatActivity {
         et.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    public void deleteAssignment(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.title_delete_dialog));
+        builder.setMessage(getString(R.string.message_delete_dialog) + " " + nameEditText.getText().toString());
+        builder.setPositiveButton(getString(R.string.positive_delete_dialog), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent();
+                intent.putExtra(getString(R.string.intent_assignment_operation), FileOperations.DELETE);
+                setResult(RESULT_OK, intent);
+                dialog.dismiss();
+                finish();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.negative_delete_dialog), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     //Allows the system to get the URI of the file that the user chose

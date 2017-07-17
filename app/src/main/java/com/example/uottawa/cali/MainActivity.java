@@ -85,7 +85,6 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 selectedIndex = position;
                 Assignment item = (Assignment)parent.getItemAtPosition(position);
-                Toast.makeText(getBaseContext(), "Rank:" + item.getRank(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getBaseContext(), AssignmentActivity.class);
                 intent.putExtra(getString(R.string.intent_assignment_data_send), item);
                 intent.putExtra(getString(R.string.intent_assignment_fresh), false);
@@ -95,6 +94,7 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
         summaryListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
+                deleteAssignment(position);
                 return true;
             }
         });
@@ -140,6 +140,7 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
             reloadAssignments();
         }
     }
+
 
     @Override
     public void onBackPressed() {
@@ -199,6 +200,29 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
         return true;
     }
 
+    public void deleteAssignment(final int position) {
+        final Assignment deleteMe = assignmentsFile.get(position);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.title_delete_dialog));
+        builder.setMessage(getString(R.string.message_delete_dialog) + " " + deleteMe.getName());
+        builder.setPositiveButton(getString(R.string.positive_delete_dialog), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                assignmentsFile.remove(position);
+                reloadAssignments();
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.negative_delete_dialog), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     public void openFilterDialog(View v) {
         ArrayList<String> courseNames = new ArrayList<>();
         boolean[] checkList = new boolean[coursesFile.size()];
@@ -247,7 +271,6 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
         boolean due = (sharedPref.getBoolean(getString(R.string.due_sort_preferences), true));
         boolean complete = (sharedPref.getBoolean(getString(R.string.complete_sort_preferences), true));
         boolean priority = (sharedPref.getBoolean(getString(R.string.priority_sort_preferences), true));
-        Toast.makeText(getBaseContext(), "bools:" + due + complete + priority, Toast.LENGTH_SHORT).show();
         for (Assignment assignment : assignmentsFile) {
             assignment.setVisible(!blackList.contains(assignment.getCourse()));
             if (assignment.getVisible() && ((assignment.getDueDate().getTime() - today) < 0 && assignment.getComplete() == 100) && !sharedPref.getBoolean(getString(R.string.completed_assignments_preferences), false)) {

@@ -15,22 +15,13 @@ import android.widget.TextView;
 
 
 public class TypeSelectorDialog extends DialogFragment {
-
-    private AssignmentTypes type;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_type_selector, container, false);
         ListView listView = (ListView)view.findViewById(R.id.typeListViewType);
+        //listView.setOnItemClickListener();
         listView.setAdapter(new TypeSelectorAdapter(view.getContext()));
         return view;
-    }
-
-    public void onItemSelected(View v) {
-        dismiss();
-    }
-
-    public AssignmentTypes getType() {
-        return type;
     }
 }
 class TypeSelectorAdapter extends ArrayAdapter {

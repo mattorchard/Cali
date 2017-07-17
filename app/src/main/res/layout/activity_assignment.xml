@@ -28,11 +28,12 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit"
+            android:src="@drawable/ic_delete"
             android:background="@android:color/transparent"
             android:tint="@color/white"
             android:scaleType="fitXY"
-            android:layout_gravity="right"/>
+            android:layout_gravity="right"
+            android:onClick="deleteAssignment"/>
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
