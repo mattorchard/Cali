@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,7 +107,7 @@ class ColorListAdapter extends ArrayAdapter {
         View rowView = inflater.inflate(R.layout.color_circle_single, parent, false);
 
         CardView colorCircle = (CardView) rowView.findViewById(R.id.colorCircleSingle);
-        colorCircle.setBackgroundTintList(context.getResources().getColorStateList(color.get(position)));
+        colorCircle.setBackgroundTintList(ResourcesCompat.getColorStateList(context.getResources(), color.get(position), null));
 
         return rowView;
     }
