@@ -79,6 +79,8 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                         intent.putExtra("oldCourseIndex", indexOfOldCourse);
                         intent.putExtra("oldCourse", oldCourse);
                         intent.putExtra("shouldEdit", true);
+                        setResult(RESULT_OK, intent);
+                        finish();
                     } else {
                         ArrayList<Course> courses = (ArrayList<Course>) getIntent().getExtras().getSerializable("courseArrayList");
                         Iterator<Course> iter = courses.iterator();
@@ -146,23 +148,75 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
 
     @Override
     public void onBackPressed() {
-
+        isTheSame = false;
         if(isNew || isEditing) {
             EditText currentName = (EditText) findViewById(R.id.editCourseTitle);
             if(currentName.getText().length() > 0) {
-                AlertDialog.Builder confirmation = new AlertDialog.Builder(CourseActivity.this);
-                confirmation.setMessage("Are you sure you want to leave unsaved changes?")
-                        .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.title_save_dialog));
+                builder.setMessage(getString(R.string.message_save_dialog));
+                builder.setPositiveButton(getString(R.string.positive_save_dialog), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditText courseName = (EditText) findViewById(R.id.editCourseTitle);
+                        course = new Course(courseName.getText().toString(), colorId, colorId);
+                        Intent intent = new Intent();
+                        intent.putExtra(getString(R.string.intent_course_operation), FileOperations.MODIFY);
+                        intent.putExtra(getString(R.string.intent_course_data_receive), course);
+                        if (isEditing) {
+                            indexOfOldCourse = getIntent().getExtras().getInt("oldCourseIndex");
+                            intent.putExtra("oldCourseIndex", indexOfOldCourse);
+                            intent.putExtra("oldCourse", oldCourse);
+                            intent.putExtra("shouldEdit", true);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        } else {
+                            ArrayList<Course> courses = (ArrayList<Course>) getIntent().getExtras().getSerializable("courseArrayList");
+                            Iterator<Course> iter = courses.iterator();
+                            while(iter.hasNext()) {
+                                Course currentCourse = iter.next();
+                                if((currentCourse.getName().equals(course.getName())) && (currentCourse.getColorIndex() == course.getColorIndex())) {
+                                    isTheSame = true;
+                                }
+                            }
+                            if(isTheSame) {
+                                final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
+                                alert.setMessage("Already a course with the same name\n" + "(Course name has to be unique)")
+                                        .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                            }
+                                        }).show();
+                            } else {
+                                setResult(RESULT_OK, intent);
                                 finish();
                             }
-                        })
-                        .setNegativeButton(R.string.negative_delete_dialog, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                            }
-                        }).show();
+                        }
+                    }
+                });
+                builder.setNeutralButton(getString(R.string.cancel_save_dialog), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton(getString(R.string.negative_save_dialog), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent();
+                        intent.putExtra(getString(R.string.intent_course_operation), FileOperations.UNCHANGED);
+                        setResult(RESULT_OK, intent);
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+            } else {
+                Intent intent = new Intent();
+                intent.putExtra(getString(R.string.intent_assignment_operation), FileOperations.UNCHANGED);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         }else {
             Intent intent = new Intent();
