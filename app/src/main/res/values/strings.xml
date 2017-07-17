@@ -27,13 +27,14 @@
 
     <!--Settings Activity-->
     <string name="title_settings">Settings</string>
-    <string name="sort_header_settings">Sort by:</string>
+    <string name="sort_header_settings">Sort assignments by:</string>
     <string name="priority_sort_settings">Priority</string>
     <string name="complete_sort_settings">Completion</string>
     <string name="due_sort_settings">Due date</string>
     <string name="notification_header_settings">Notifications:</string>
     <string name="daily_notifications_settings">Daily reminder</string>
     <string name="upcoming_notifications_settings">Upcoming assignment</string>
+    <string name="completed_assignments_settings">Show completed assignments</string>
 
     <!--Assignment type-->
     <string name="title_type_dialog">Select an assignment type:</string>
@@ -58,6 +59,7 @@
     <string name="complete_sort_preferences">complete_sort_preferences</string>
     <string name="daily_notification_preferences">daily_notification_preferences</string>
     <string name="upcoming_notification_preferences">upcoming_notification_preferences</string>
+    <string name="completed_assignments_preferences">show_complete_preferences</string>
 
     <!--File storage-->
     <string name="assignments_filename">cali_assignments.ser</string>

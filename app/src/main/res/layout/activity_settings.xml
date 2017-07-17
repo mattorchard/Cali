@@ -93,4 +93,29 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Misc"
+        android:textSize="@dimen/text_heading_2"
+        android:textColor="@color/textEmphasis"
+        android:paddingTop="20dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_heading_3"
+            android:textColor="@color/textMediumEmphasis"
+            android:text="@string/completed_assignments_settings"/>
+        <Switch
+            android:id="@+id/completedAssignmentsSwitchSettings"
+            android:layout_gravity="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
 </LinearLayout>

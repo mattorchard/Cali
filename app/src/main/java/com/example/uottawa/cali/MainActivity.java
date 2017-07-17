@@ -1,7 +1,9 @@
 package com.example.uottawa.cali;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -20,6 +22,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 public class MainActivity extends IOActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -75,14 +78,14 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
 
         //ListView
         setSampleData();
-        ArrayAdapter summaryListViewAdapter = new AssignmentListAdapter(this, assignmentsFile.toArray(new Assignment[assignmentsFile.size()]));
+        reloadAssignments();
         ListView summaryListView = (ListView)findViewById(R.id.summaryListViewMain);
-        summaryListView.setAdapter(summaryListViewAdapter);
         summaryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 selectedIndex = position;
                 Assignment item = (Assignment)parent.getItemAtPosition(position);
+                Toast.makeText(getBaseContext(), "Rank:" + item.getRank(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getBaseContext(), AssignmentActivity.class);
                 intent.putExtra(getString(R.string.intent_assignment_data_send), item);
                 intent.putExtra(getString(R.string.intent_assignment_fresh), false);
@@ -120,7 +123,13 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
             if (resultCode == RESULT_OK) {
                 FileOperations assignmentOperation = (FileOperations)data.getSerializableExtra(getString(R.string.intent_assignment_operation));
                 if (FileOperations.MODIFY == assignmentOperation) {
-                    assignmentsFile.set(selectedIndex, (Assignment)data.getSerializableExtra(getString(R.string.intent_assignment_data_receive)));
+                    Assignment freshAssignment = (Assignment)data.getSerializableExtra(getString(R.string.intent_assignment_data_receive));
+                    for (Course course : coursesFile) {
+                        if (course.getName().equals(freshAssignment.getCourse().getName())) {
+                            freshAssignment.setCourse(course);
+                        }
+                    }
+                    assignmentsFile.set(selectedIndex, freshAssignment);
                     reloadAssignments();
                 } else if (FileOperations.DELETE == assignmentOperation) {
                     assignmentsFile.remove(selectedIndex);
@@ -227,8 +236,43 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
     }
 
     private void reloadAssignments() {
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        long maximumDays = 1;
+        long today = new Date().getTime();
+        for (Assignment assignment : assignmentsFile) {
+            if (Math.abs(assignment.getDueDate().getTime() - today) > maximumDays) {
+                maximumDays = Math.abs(assignment.getDueDate().getTime() - today);
+            }
+        }
+        boolean due = (sharedPref.getBoolean(getString(R.string.due_sort_preferences), true));
+        boolean complete = (sharedPref.getBoolean(getString(R.string.complete_sort_preferences), true));
+        boolean priority = (sharedPref.getBoolean(getString(R.string.priority_sort_preferences), true));
+        Toast.makeText(getBaseContext(), "bools:" + due + complete + priority, Toast.LENGTH_SHORT).show();
+        for (Assignment assignment : assignmentsFile) {
+            assignment.setVisible(!blackList.contains(assignment.getCourse()));
+            if (assignment.getVisible() && ((assignment.getDueDate().getTime() - today) < 0 && assignment.getComplete() == 100) && !sharedPref.getBoolean(getString(R.string.completed_assignments_preferences), false)) {
+                assignment.setVisible(false);
+            }
+            double rank = 0;
+            if (due) {
+                System.out.println("Adding due");
+                rank += (assignment.getDueDate().getTime() - today) / (maximumDays * 2.0);
+            }
+            if (complete) {
+                System.out.println("Adding complete");
+                rank += assignment.getComplete() / 100.0;
+            }
+            if (priority) {
+                System.out.println("Adding priority");
+                rank += (assignment.getPriority() - 1)/ 4.0;
+            }
+            assignment.setRank(rank);
+        }
+        Collections.sort(assignmentsFile);
         ArrayAdapter summaryListViewAdapter = new AssignmentListAdapter(this, assignmentsFile.toArray(new Assignment[assignmentsFile.size()]));
+        summaryListViewAdapter.notifyDataSetChanged();
         ListView summaryListView = (ListView)findViewById(R.id.summaryListViewMain);
+        summaryListView.invalidateViews();
         summaryListView.setAdapter(summaryListViewAdapter);
     }
 
@@ -240,6 +284,7 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
                 blackList.add(coursesFile.get(changed.get(i)));
             }
         }
+        reloadAssignments();
     }
     private void reloadCourses() {
         blackList = new ArrayList<>();

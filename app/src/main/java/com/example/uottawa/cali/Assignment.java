@@ -1,11 +1,13 @@
 package com.example.uottawa.cali;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Assignment implements Serializable {
+public class Assignment implements Serializable, Comparable<Assignment> {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d", Locale.getDefault());
     private static final Course unsetCourse = new Course("Unset", R.color.courseColor0, R.color.courseColor0a);
     private Course course = unsetCourse;
@@ -15,6 +17,9 @@ public class Assignment implements Serializable {
     private int priority = 3;
     private AssignmentTypes type = AssignmentTypes.UNSET;
     private String description = "";
+
+    private boolean visible = true;
+    private double rank;
 
     public Assignment(Course course, String name, int complete, Date dueDate, int priority, AssignmentTypes type, String description) {
         this.course = course;
@@ -35,6 +40,22 @@ public class Assignment implements Serializable {
         this.description = original.getDescription();
     }
     public Assignment() {}
+
+    public double getRank() {
+        return rank;
+    }
+
+    public void setRank(double rank) {
+        this.rank = rank;
+    }
+
+    public boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
 
     public Course getCourse() {
         return course;
@@ -106,4 +127,9 @@ public class Assignment implements Serializable {
                this.type == other.getType() &&
                this.description.equals(other.getDescription());
    }
+
+    @Override
+    public int compareTo(@NonNull Assignment o) {
+        return Double.valueOf(rank).compareTo(o.getRank());
+    }
 }
