@@ -18,12 +18,14 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 
 public class MainActivity extends IOActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -68,12 +70,24 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         //Add course button
-        ImageButton addCourseBtn = (ImageButton) findViewById(R.id.addCourseBtn);
+        LinearLayout addCourseBtn = (LinearLayout) findViewById(R.id.addCourseLayout);
         addCourseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent("com.example.uottawa.cali.CourseActivity");
                 intent.putExtra("isNewCourse", true);
+                intent.putExtra("courseArrayList", coursesFile);
+                startActivityForResult(intent, COURSE_REQUEST);
+            }
+        });
+
+        ImageButton addCourseBtn2 = (ImageButton) findViewById(R.id.addCourseBtn);
+        addCourseBtn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent("com.example.uottawa.cali.CourseActivity");
+                intent.putExtra("isNewCourse", true);
+                intent.putExtra("courseArrayList", coursesFile);
                 startActivityForResult(intent, COURSE_REQUEST);
             }
         });
@@ -113,6 +127,8 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
                 Intent intent = new Intent(getBaseContext(), CourseActivity.class);
                 intent.putExtra("course", item);
                 intent.putExtra("isNewCourse", false);
+                /*Toast.makeText(MainActivity.this, String.valueOf(position), Toast.LENGTH_LONG).show();*/
+                intent.putExtra("oldCourseIndex", position);
                 startActivityForResult(intent, COURSE_REQUEST);
             }
         });
@@ -145,7 +161,12 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
                 FileOperations courseOperation = (FileOperations)data.getSerializableExtra(getString(R.string.intent_course_operation));
                 if(FileOperations.MODIFY == courseOperation) {
                     Course freshCourse = (Course)data.getSerializableExtra(getString(R.string.intent_course_data_receive));
-                    coursesFile.add(freshCourse);
+                    if(data.getBooleanExtra("shouldEdit", false)==false) {
+                        coursesFile.add(freshCourse);
+                    } else {
+                        int index = data.getIntExtra("oldCourseIndex", -1);
+                        coursesFile.set(index, freshCourse);
+                    }
                     drawerAdapter.notifyDataSetChanged();
                 }
             }
