@@ -88,20 +88,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingTop="@dimen/padding_divider_assignment">
+
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/due_header_assignment"
-                    android:textSize="@dimen/text_heading_2"
-                    android:textColor="@color/textMediumEmphasis"/>
-                <TextView
-                    android:id="@+id/dueTextViewAssignment"
-                    android:gravity="end"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/due_header_assignment"
+                    android:textColor="@color/textMediumEmphasis"
+                    android:textSize="@dimen/text_heading_2" />
+
+                <TextView
+                    android:id="@+id/dueTextViewAssignment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
                     android:text="@string/dynamic_text_unset"
+                    android:textColor="@color/textMediumEmphasis"
                     android:textSize="@dimen/text_heading_2"
-                    android:textColor="@color/textMediumEmphasis"/>
+                    android:onClick="changeDate" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -244,17 +249,6 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="32dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="File 1"
-                        android:textColor="@color/colorAccent" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -264,16 +258,6 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/link1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="32dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="Link 1"
-                        android:textColor="@color/colorAccent" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

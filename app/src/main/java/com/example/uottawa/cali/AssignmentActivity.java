@@ -18,11 +18,14 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -36,13 +39,19 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
 
-public class AssignmentActivity extends AppCompatActivity {
+public class AssignmentActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private final int[] priorityButtons = new int[]{R.id.priorityButton1Assignment, R.id.priorityButton2Assignment, R.id.priorityButton3Assignment, R.id.priorityButton4Assignment, R.id.priorityButton5Assignment};
     private boolean fresh;
     private Assignment assignment;
@@ -59,6 +68,10 @@ public class AssignmentActivity extends AppCompatActivity {
     private LinearLayout linkLayout;
     private static LinkedList<Uri> uriList;
     private static LinkedList<String> urlList;
+
+    private Calendar currentDate;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +128,10 @@ public class AssignmentActivity extends AppCompatActivity {
         //Description
         descriptionEditText = (EditText)findViewById(R.id.descriptionEditTextAssignment);
         descriptionEditText.setText(assignment.getDescription());
+
+        //Update the current date calendar
+        currentDate = Calendar.getInstance();
+        currentDate.setTime(assignment.getDueDate());
     }
 
     @Override
@@ -169,7 +186,7 @@ public class AssignmentActivity extends AppCompatActivity {
     }
 
     public void changeCourse(View v) {
-        Toast.makeText(getBaseContext(), "Course change unimplimented", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), "Course change unimplemented", Toast.LENGTH_SHORT).show();
     }
 
     public void addLink(View v){
@@ -188,21 +205,30 @@ public class AssignmentActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                urlList.add(urlEditText.getText().toString());
+                final String url = appendUrlPrefix(urlEditText.getText().toString());
+                String name = nameEditText.getText().toString().replace(" " , "");
+                urlList.add(url);
+
                 TextView urlView = new TextView(AssignmentActivity.this);
-                SpannableString urlText = new SpannableString(nameEditText.getText().toString());
+                if (name.equals("")) {
+                    name = url;
+                }
+
+                SpannableString nameText = new SpannableString(name);
                 //Make the text underlined
-                urlText.setSpan(new UnderlineSpan(), 0, urlText.length(), 0);
-                urlView.setText(urlText);
+                nameText.setSpan(new UnderlineSpan(), 0, nameText.length(), 0);
+                urlView.setText(nameText);
 
                 //Add an onClickListener so the hyperlink can navigate to the link when clicked
                 urlView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlEditText.getText().toString()));
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         startActivity(browserIntent);
                     }
                 });
+
+
 
                 appendNewTextView(linkLayout, urlView);
             }
@@ -293,7 +319,7 @@ public class AssignmentActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //If the user sucessfully chose a file, add it to the list
+        //If the user successfully chose a file, add it to the list
         if(requestCode == 420 && resultCode == RESULT_OK) {
             final Uri selectedFile = data.getData();
             uriList.add(selectedFile);
@@ -305,7 +331,6 @@ public class AssignmentActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
                     openFileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    //openFileIntent.setDataAndType(selectedFile, "*/*");
                     openFileIntent.setData(selectedFile);
                     try {
                         startActivity(openFileIntent);
@@ -316,6 +341,26 @@ public class AssignmentActivity extends AppCompatActivity {
             });
             appendNewTextView(attachmentLayout, uriView);
         }
+    }
+
+    public void changeDate(View v){
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog datePicker = null;
+
+        //If no date has been set yet, let's start the calendar from today's date
+
+
+        //Otherwise, start the calendar from the last set date
+
+        datePicker = DatePickerDialog.newInstance(
+                AssignmentActivity.this,
+                currentDate.get(currentDate.YEAR),
+                currentDate.get(currentDate.MONTH),
+                currentDate.get(currentDate.DAY_OF_MONTH)
+        );
+
+
+        datePicker.show(getFragmentManager(), "Due date");
     }
 
     /**
@@ -339,6 +384,37 @@ public class AssignmentActivity extends AppCompatActivity {
         newTextView.setLayoutParams(layoutParams);
 
         parentLayout.addView(newTextView);
+        newTextView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View view) {
+                PopupMenu popupMenu = new PopupMenu(AssignmentActivity.this, view);
+                popupMenu.inflate(R.menu.attachment_link_popup_menu);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        attachmentLayout.removeView(view);
+                        linkLayout.removeView(view);
+                        return false;
+                    }
+                });
+                popupMenu.show();
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Checks if a URL starts with "http", if it does not, prepend it.
+     * This is because the URL must start with http, or the browser activity
+     * will not be able to process it.
+     * @param link
+     * @return
+     */
+    private String appendUrlPrefix(String link) {
+        if (!link.startsWith("http")) {
+            link = "http://" + link;
+        }
+        return link;
     }
 
     //Method used to get a file name from a URI
@@ -367,4 +443,59 @@ public class AssignmentActivity extends AppCompatActivity {
         return result;
     }
 
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        String month = "";
+
+        switch (monthOfYear) {
+            case 0:
+                month = "January";
+                break;
+            case 1:
+                month = "February";
+                break;
+            case 2:
+                month = "March";
+                break;
+            case 3:
+                month = "April";
+                break;
+            case 4:
+                month = "May";
+                break;
+            case 5:
+                month = "June";
+                break;
+            case 6:
+                month = "July";
+                break;
+            case 7:
+                month = "August";
+                break;
+            case 8:
+                month = "September";
+                break;
+            case 9:
+                month = "October";
+                break;
+            case 10:
+                month = "November";
+                break;
+            case 11:
+                month = "December";
+                break;
+        }
+
+        String date = month + " " + dayOfMonth;
+
+        //Update the currentDate object
+        currentDate = new GregorianCalendar();
+        currentDate.set(Calendar.YEAR, year);
+        currentDate.set(Calendar.MONTH, monthOfYear);
+        currentDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        //Update the saved due date and the TextView
+        assignment.setDueDate(currentDate.getTime());
+        dueTextView.setText(date);
+    }
 }
