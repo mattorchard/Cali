@@ -25,7 +25,10 @@
             android:name=".AssignmentActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CourseActivity">
+        <activity android:name=".CourseActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
             <intent-filter>
                 <action android:name="com.example.uottawa.cali.CourseActivity" />
 

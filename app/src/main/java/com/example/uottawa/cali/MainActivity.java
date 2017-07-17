@@ -29,8 +29,10 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
 
     static final int ASSIGNMENT_REQUEST = 1;
     static final int SETTINGS_REQUEST = 2;
+    static final int COURSE_REQUEST = 3;
     private int selectedIndex;
     private ArrayList<Course> blackList;
+    private DrawerListAdapter drawerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,7 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
             public void onClick(View view) {
                 Intent intent = new Intent("com.example.uottawa.cali.CourseActivity");
                 intent.putExtra("isNewCourse", true);
-                startActivity(intent);
+                startActivityForResult(intent, COURSE_REQUEST);
             }
         });
 
@@ -99,7 +101,7 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
             }
         });
         //Drawer layout ListView
-        ArrayAdapter drawerAdapter = new DrawerListAdapter(this, coursesFile);
+        drawerAdapter = new DrawerListAdapter(this, coursesFile);
         final ListView drawerListView = (ListView)findViewById(R.id.drawerlist);
         drawerListView.setAdapter(drawerAdapter);
         drawerListView.setClickable(true);
@@ -111,7 +113,7 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
                 Intent intent = new Intent(getBaseContext(), CourseActivity.class);
                 intent.putExtra("course", item);
                 intent.putExtra("isNewCourse", false);
-                startActivity(intent);
+                startActivityForResult(intent, COURSE_REQUEST);
             }
         });
         setCourseDialog(drawerListView, coursesFile, drawerAdapter);
@@ -138,6 +140,15 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
             }
         } else if (requestCode == SETTINGS_REQUEST) {
             reloadAssignments();
+        } else if (requestCode == COURSE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                FileOperations courseOperation = (FileOperations)data.getSerializableExtra(getString(R.string.intent_course_operation));
+                if(FileOperations.MODIFY == courseOperation) {
+                    Course freshCourse = (Course)data.getSerializableExtra(getString(R.string.intent_course_data_receive));
+                    coursesFile.add(freshCourse);
+                    drawerAdapter.notifyDataSetChanged();
+                }
+            }
         }
     }
 

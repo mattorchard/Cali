@@ -59,6 +59,12 @@
     <string name="intent_assignment_data_send">intent_assignment_data_send</string>
     <string name="intent_assignment_data_receive">intent_assignment_data_receive</string>
 
+    <!--Intent keys-->
+    <string name="intent_course_fresh">intent_course_fresh</string>
+    <string name="intent_course_operation">intent_course_operation</string>
+    <string name="intent_course_data_send">intent_course_data_send</string>
+    <string name="intent_course_data_receive">intent_course_data_receive</string>
+
     <!--Preferences-->
     <string name="preference_file_key">com.example.uottawa.cali.preference_key</string>
     <string name="priority_sort_preferences">priority_sort_preferences</string>
@@ -102,6 +108,7 @@ Phasellus fermentum id velit eu porta. In aliquet tempus purus vitae sollicitudi
     <string name="add_course">Add a course</string>
     <string name="course_name">Course name</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="dialog_course_color">Choose a color for your course: </string>
     <!--
     <
 
