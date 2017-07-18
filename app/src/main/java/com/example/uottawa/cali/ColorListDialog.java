@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class ColorListDialog extends DialogFragment {
 
     private Integer[] color1 = new Integer[] {R.color.courseColor1, R.color.courseColor5a, R.color.courseColor3};
     private Integer[] color2 = new Integer[] {R.color.courseColor7, R.color.courseColor4, R.color.courseColor2};
-    private Integer[] color3 = new Integer[] {R.color.courseColor6, R.color.courseColor3a, R.color.colorPrimaryDark};
+    private Integer[] color3 = new Integer[] {R.color.courseColor6, R.color.courseColor3a, R.color.courseColor8};
     private int colorId;
     private EditNameDialogListener listener;
 
@@ -81,6 +82,14 @@ public class ColorListDialog extends DialogFragment {
     public void onDetach() {
         listener = null;
         super.onDetach();
+    }
+    @Override
+    public void onResume() {
+        ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.width = LinearLayoutCompat.LayoutParams.WRAP_CONTENT;
+        params.height = LinearLayoutCompat.LayoutParams.WRAP_CONTENT;
+        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+        super.onResume();
     }
 }
 

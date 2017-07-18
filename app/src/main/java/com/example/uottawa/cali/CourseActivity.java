@@ -57,10 +57,6 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
 
     public void switchToEdit() {
         createColorOptions();
-        ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
-        switcher.showNext(); //or switcher.showPrevious();
-        ViewSwitcher courseToolbarSwitcher = (ViewSwitcher) findViewById(R.id.course_toolbar_switcher);
-        courseToolbarSwitcher.showNext();
         ImageButton saveButton = (ImageButton) findViewById(R.id.saveCourseBtn);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,24 +112,17 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
     }
 
     public void populateFields() {
-        TextView courseTitleText = (TextView) findViewById(R.id.courseTitle);
         CardView colorCircle = (CardView) findViewById(R.id.colorCircle);
         course = (Course) getIntent().getExtras().getSerializable("course");
         colorCircle.setBackgroundTintList(ResourcesCompat.getColorStateList(this.getResources(), course.getColorIndex(), null));
         colorId = course.getColorIndex();
         secondaryColorId = course.getColorInverseIndex();
-        courseTitleText.setText(course.getName());
         oldCourse = course;
-        ImageButton editButton = (ImageButton) findViewById(R.id.editCourseBtn);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isEditing = true;
-                switchToEdit();
-                EditText courseName = (EditText) findViewById(R.id.editCourseTitle);
-                courseName.setText(course.getName());
-            }
-        });
+        isEditing = true;
+        switchToEdit();
+        EditText courseName = (EditText) findViewById(R.id.editCourseTitle);
+        courseName.setText(course.getName());
+
     }
     public void createColorOptions() {
 
@@ -165,7 +154,7 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
             if(currentName.getText().length() > 0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.title_save_dialog));
-                builder.setMessage(getString(R.string.message_save_dialog));
+                builder.setMessage(getString(R.string.message_course_save_dialog));
                 builder.setPositiveButton(getString(R.string.positive_save_dialog), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
