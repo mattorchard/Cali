@@ -5,6 +5,9 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -18,6 +21,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,8 +77,6 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
 
         attachmentLayout = (LinearLayout) findViewById(R.id.attachmentLayout);
         linkLayout = (LinearLayout) findViewById(R.id.linkLayout);
-        uriList = new LinkedList<>();
-        urlList = new LinkedList<>();
 
         Intent intent = getIntent();
         courseList = (ArrayList<Course>) intent.getSerializableExtra(getString(R.string.intent_course_list));
@@ -85,14 +87,17 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
             finish();
         }
         assignmentOriginal = new Assignment(assignment);
+
         //Course bar
         courseTextView = (TextView)findViewById(R.id.courseTextViewAssignment);
         courseBackground = (LinearLayout)findViewById(R.id.courseBackgroundAssignment);
         courseTextView.setText(assignment.getCourse().getName());
         courseBackground.setBackgroundResource(assignment.getCourse().getColorIndex());
+
         //Assignment name
         nameEditText = (EditText)findViewById(R.id.nameEditTextAssignment);
         nameEditText.setText(assignment.getName());
+
         //Complete
         SeekBar completeBar = (SeekBar)findViewById(R.id.completeSeekBarAssignment);
         completeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -110,15 +115,19 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
         completeBar.setProgress(assignment.getComplete());
         TextView completeText = (TextView)findViewById(R.id.completeTextViewAssignment);
         completeText.setText(String.format("%s %s%%",getString(R.string.complete_header_assignment), assignment.getComplete()));
+
         //Due
         dueTextView = (TextView)findViewById(R.id.dueTextViewAssignment);
         dueTextView.setText(assignment.getDateString());
+
         //Priority
         ImageButton priorityButton = (ImageButton)findViewById(priorityButtons[assignment.getPriority() - 1]);
         priorityButton.setColorFilter(ContextCompat.getColor(AssignmentActivity.this, R.color.colorAccent));
+
         //Type
         typeTextView = (TextView)findViewById(R.id.typeTextViewAssignment);
         typeTextView.setText(getString(assignment.getType().getNameID()));
+
         //Description
         descriptionEditText = (EditText)findViewById(R.id.descriptionEditTextAssignment);
         descriptionEditText.setText(assignment.getDescription());
@@ -126,6 +135,26 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
         //Update the current date calendar
         currentDate = Calendar.getInstance();
         currentDate.setTime(assignment.getDueDate());
+
+        //Repopulate the attachments and links if they exist
+        if (!assignment.getAttachmentList().isEmpty()) {
+            for (NamedUri namedUri : assignment.getAttachmentList()) {
+                Uri selectedFile = Uri.parse(namedUri.getUri());
+
+                TextView uriView = createTextViewFromUri(selectedFile, namedUri.getName());
+
+                appendNewTextView(attachmentLayout, uriView, namedUri, null);
+            }
+        }
+
+        if (!assignment.getNamedLinkList().isEmpty()) {
+            for (NamedLink namedLink : assignment.getNamedLinkList()) {
+
+                TextView urlView = createTextViewFromNamedLink(namedLink);
+
+                appendNewTextView(linkLayout, urlView, null, namedLink);
+            }
+        }
     }
 
     @Override
@@ -222,32 +251,18 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final String url = appendUrlPrefix(urlEditText.getText().toString());
+                String url = appendUrlPrefix(urlEditText.getText().toString());
                 String name = nameEditText.getText().toString().replace(" " , "");
-                urlList.add(url);
 
-                TextView urlView = new TextView(AssignmentActivity.this);
                 if (name.equals("")) {
                     name = url;
                 }
 
-                SpannableString nameText = new SpannableString(name);
-                //Make the text underlined
-                nameText.setSpan(new UnderlineSpan(), 0, nameText.length(), 0);
-                urlView.setText(nameText);
+                NamedLink namedLink = new NamedLink(name, url);
+                TextView urlView = createTextViewFromNamedLink(namedLink);
+                assignment.getNamedLinkList().add(namedLink);
 
-                //Add an onClickListener so the hyperlink can navigate to the link when clicked
-                urlView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        startActivity(browserIntent);
-                    }
-                });
-
-
-
-                appendNewTextView(linkLayout, urlView);
+                appendNewTextView(linkLayout, urlView, null, namedLink);
             }
         });
 
@@ -262,11 +277,21 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
     }
 
     public void addFile(View v){
-        Intent intentAddFile = new Intent();
-        intentAddFile.setType("*/*");
-        intentAddFile.setAction(Intent.ACTION_GET_CONTENT);
 
-        startActivityForResult(Intent.createChooser(intentAddFile, "Select a file"), 420);
+        if (Build.VERSION.SDK_INT < 19) {
+            Intent intentAddFile = new Intent();
+            intentAddFile.setType("*/*");
+            intentAddFile.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intentAddFile, 420);
+        } else {
+            Intent intentAddFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intentAddFile.addCategory(Intent.CATEGORY_OPENABLE);
+            intentAddFile.setType("*/*");
+            intentAddFile.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intentAddFile, 420);
+        }
+
+
     }
 
     public void changePriority(View v) {
@@ -338,25 +363,13 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
 
         //If the user successfully chose a file, add it to the list
         if(requestCode == 420 && resultCode == RESULT_OK) {
-            final Uri selectedFile = data.getData();
-            uriList.add(selectedFile);
+            Uri selectedFile = data.getData();
+            //Must convert the URI into a string, or the assignment will not be able to serialize
+            NamedUri namedUri = new NamedUri(getFileName(selectedFile), selectedFile.toString());
+            assignment.getAttachmentList().add(namedUri);
 
-            TextView uriView = new TextView(this);
-            uriView.setText(getFileName(selectedFile));
-            uriView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
-                    openFileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    openFileIntent.setData(selectedFile);
-                    try {
-                        startActivity(openFileIntent);
-                    } catch (ActivityNotFoundException e) {
-
-                    }
-                }
-            });
-            appendNewTextView(attachmentLayout, uriView);
+            TextView uriView = createTextViewFromUri(selectedFile, getFileName(selectedFile));
+            appendNewTextView(attachmentLayout, uriView, namedUri, null);
         }
     }
 
@@ -380,12 +393,57 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
         datePicker.show(getFragmentManager(), "Due date");
     }
 
+    private TextView createTextViewFromUri(final Uri uri, String name) {
+
+        TextView uriView = new TextView(this);
+        uriView.setText(name);
+
+        uriView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
+                //openFileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                openFileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                openFileIntent.setData(uri);
+
+                try {
+                    startActivity(openFileIntent);
+                } catch (ActivityNotFoundException e) {
+
+                }
+            }
+        });
+
+        return uriView;
+    }
+
+    private TextView createTextViewFromNamedLink(final NamedLink namedLink) {
+
+        TextView urlView = new TextView(this);
+        SpannableString nameText = new SpannableString(namedLink.getName());
+
+        //Make the text underlined
+        nameText.setSpan(new UnderlineSpan(), 0, nameText.length(), 0);
+        urlView.setText(nameText);
+
+        //Add an onClickListener so the hyperlink can navigate to the link when clicked
+        urlView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(namedLink.getUrl()));
+                startActivity(browserIntent);
+            }
+        });
+
+        return urlView;
+    }
+
     /**
      * Method used to add a new TextView to the Attachment or Link layout.
      * @param parentLayout
      * @param newTextView
      */
-    private void appendNewTextView(LinearLayout parentLayout, TextView newTextView) {
+    private void appendNewTextView(LinearLayout parentLayout, TextView newTextView, final NamedUri namedUri, final NamedLink namedLink) {
 
         int marginTopDp = 20;
         int marginLeftDp = 32;
@@ -409,8 +467,14 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        attachmentLayout.removeView(view);
-                        linkLayout.removeView(view);
+                        if (view.getParent().equals(attachmentLayout)) {
+                            attachmentLayout.removeView(view);
+                            findAndRemoveAttachment(namedUri);
+                        } else {
+                            linkLayout.removeView(view);
+                            findAndRemoveLink(namedLink);
+                        }
+
                         return false;
                     }
                 });
@@ -418,6 +482,25 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
                 return true;
             }
         });
+    }
+
+    private void findAndRemoveAttachment(NamedUri namedUri) {
+        for (NamedUri uri : assignment.getAttachmentList()) {
+            if (uri.equals(namedUri)) {
+                assignment.getAttachmentList().remove(uri);
+            }
+        }
+    }
+
+    private void findAndRemoveLink(NamedLink namedLink) {
+        for (NamedLink link : assignment.getNamedLinkList()) {
+            Log.d("Link", "NamedLink in assignment: " + link.getName() + ", " + link.getUrl());
+            Log.d("Link", "NamedLink in parameter: " + namedLink.getName() + ", " + namedLink.getUrl());
+            if (link.equals(namedLink)) {
+                assignment.getNamedLinkList().remove(link);
+                Log.d("Link", "Removed the shit");
+            }
+        }
     }
 
     /**

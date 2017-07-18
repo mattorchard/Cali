@@ -1,10 +1,12 @@
 package com.example.uottawa.cali;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Locale;
 
 public class Assignment implements Serializable, Comparable<Assignment> {
@@ -17,6 +19,8 @@ public class Assignment implements Serializable, Comparable<Assignment> {
     private int priority = 3;
     private AssignmentTypes type = AssignmentTypes.UNSET;
     private String description = "";
+    private LinkedList<NamedUri> attachmentList = new LinkedList<>();
+    private LinkedList<NamedLink> namedLinkList = new LinkedList<>();
 
     private boolean visible = true;
     private double rank;
@@ -29,6 +33,7 @@ public class Assignment implements Serializable, Comparable<Assignment> {
         this.priority = priority;
         this.type = type;
         this.description = description;
+
     }
     public Assignment(Assignment original) {
         this.course = original.getCourse();
@@ -38,6 +43,8 @@ public class Assignment implements Serializable, Comparable<Assignment> {
         this.priority = original.getPriority();
         this.type = original.getType();
         this.description = original.getDescription();
+        this.attachmentList = new LinkedList<>(original.getAttachmentList());
+        this.namedLinkList = new LinkedList<>(original.getNamedLinkList());
     }
     public Assignment() {}
 
@@ -115,7 +122,15 @@ public class Assignment implements Serializable, Comparable<Assignment> {
 
     public String getDateString() {
        return dateFormat.format(dueDate);
-   }
+    }
+
+    public LinkedList<NamedUri> getAttachmentList() {
+        return this.attachmentList;
+    }
+
+    public LinkedList<NamedLink> getNamedLinkList() {
+        return this.namedLinkList;
+    }
 
    public boolean equals(Assignment other) {
        return
@@ -125,7 +140,9 @@ public class Assignment implements Serializable, Comparable<Assignment> {
                this.dueDate.equals(other.dueDate) &&
                this.priority == other.getPriority() &&
                this.type == other.getType() &&
-               this.description.equals(other.getDescription());
+               this.description.equals(other.getDescription()) &&
+               this.attachmentList.equals(other.getAttachmentList()) &&
+               this.namedLinkList.equals(other.getNamedLinkList());
    }
 
     @Override
