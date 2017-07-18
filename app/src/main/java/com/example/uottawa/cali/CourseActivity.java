@@ -149,9 +149,12 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
     @Override
     public void onBackPressed() {
         isTheSame = false;
-        if(isNew || isEditing) {
+        EditText courseName = (EditText) findViewById(R.id.editCourseTitle);
+        if (isEditing && (oldCourse.getName().equals(courseName.getText().toString())) && (oldCourse.getColorIndex() == colorId)) {
+            finish();
+        } else {
             EditText currentName = (EditText) findViewById(R.id.editCourseTitle);
-            if(currentName.getText().length() > 0) {
+            if (currentName.getText().length() > 0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.title_save_dialog));
                 builder.setMessage(getString(R.string.message_course_save_dialog));
@@ -173,13 +176,13 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                         } else {
                             ArrayList<Course> courses = (ArrayList<Course>) getIntent().getExtras().getSerializable("courseArrayList");
                             Iterator<Course> iter = courses.iterator();
-                            while(iter.hasNext()) {
+                            while (iter.hasNext()) {
                                 Course currentCourse = iter.next();
-                                if((currentCourse.getName().equals(course.getName())) && (currentCourse.getColorIndex() == course.getColorIndex())) {
+                                if ((currentCourse.getName().equals(course.getName())) && (currentCourse.getColorIndex() == course.getColorIndex())) {
                                     isTheSame = true;
                                 }
                             }
-                            if(isTheSame) {
+                            if (isTheSame) {
                                 final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
                                 alert.setMessage("A course with the same name already exists")
                                         .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
@@ -218,11 +221,6 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                 setResult(RESULT_OK, intent);
                 finish();
             }
-        }else {
-            Intent intent = new Intent();
-            intent.putExtra(getString(R.string.intent_course_operation), FileOperations.UNCHANGED);
-            setResult(RESULT_OK, intent);
-            finish();
         }
     }
     public void createHashMap() {

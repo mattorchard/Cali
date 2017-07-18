@@ -36,6 +36,6 @@
             android:paddingRight="10dp"
             android:text="test"
             android:textColor="@android:color/black"
-            android:textSize="28sp" />
+            android:textSize="20sp" />
     </TableRow>
 </TableLayout>
