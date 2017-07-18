@@ -1,5 +1,7 @@
 package com.example.uottawa.cali;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,20 +22,26 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 
 
 public class AssignmentActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private final int[] priorityButtons = new int[]{R.id.priorityButton1Assignment, R.id.priorityButton2Assignment, R.id.priorityButton3Assignment, R.id.priorityButton4Assignment, R.id.priorityButton5Assignment};
+    private ArrayList<Course> courseList;
     private boolean fresh;
     private Assignment assignment;
     private Assignment assignmentOriginal;
@@ -69,6 +77,7 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
         urlList = new LinkedList<>();
 
         Intent intent = getIntent();
+        courseList = (ArrayList<Course>) intent.getSerializableExtra(getString(R.string.intent_course_list));
         fresh = intent.getBooleanExtra(getString(R.string.intent_assignment_fresh), false);
         assignment = (Assignment)intent.getSerializableExtra(getString(R.string.intent_assignment_data_send));
         if (null == assignment) {
@@ -78,8 +87,8 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
         assignmentOriginal = new Assignment(assignment);
         //Course bar
         courseTextView = (TextView)findViewById(R.id.courseTextViewAssignment);
-        courseTextView.setText(assignment.getCourse().getName());
         courseBackground = (LinearLayout)findViewById(R.id.courseBackgroundAssignment);
+        courseTextView.setText(assignment.getCourse().getName());
         courseBackground.setBackgroundResource(assignment.getCourse().getColorIndex());
         //Assignment name
         nameEditText = (EditText)findViewById(R.id.nameEditTextAssignment);
@@ -171,8 +180,31 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
     }
 
     public void changeCourse(View v) {
-        Toast.makeText(getBaseContext(), "Course change unimplemented", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getBaseContext(), "Course change unimplemented", Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentActivity.this);
+        // Get the layout inflater
+        LayoutInflater inflater = getLayoutInflater();
+
+        // Inflate and set the layout for the dialog
+        // Pass null as the parent view because its going in the dialog layout
+        View view = inflater.inflate(R.layout.dialog_course_selector, null);
+        builder.setView(view);
+        ListView listView = (ListView)view.findViewById(R.id.courseDialogListView);
+        listView.setAdapter(new CourseSelectorAdapter(getBaseContext(), courseList.toArray(new Course[courseList.size()])));
+        final AlertDialog dialog = builder.create();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                assignment.setCourse(courseList.get(position));
+                dialog.dismiss();
+                courseTextView.setText(assignment.getCourse().getName());
+                courseBackground.setBackgroundResource(assignment.getCourse().getColorIndex());
+            }
+
+        });
+        dialog.show();
     }
+
 
     public void addLink(View v){
         //Create a new dialog to take the URL info from the user

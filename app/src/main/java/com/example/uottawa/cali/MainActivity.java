@@ -56,6 +56,7 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
                 Intent intent = new Intent(getBaseContext(), AssignmentActivity.class);
                 intent.putExtra(getString(R.string.intent_assignment_data_send), freshAssignment);
                 intent.putExtra(getString(R.string.intent_assignment_fresh), true);
+                intent.putExtra(getString(R.string.intent_course_list), coursesFile);
                 startActivityForResult(intent, ASSIGNMENT_REQUEST);
             }
         });
@@ -67,6 +68,7 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
                 //Maybe something needs to happen here
             }
         };
+
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         //Add course button
@@ -104,6 +106,7 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
                 Intent intent = new Intent(getBaseContext(), AssignmentActivity.class);
                 intent.putExtra(getString(R.string.intent_assignment_data_send), item);
                 intent.putExtra(getString(R.string.intent_assignment_fresh), false);
+                intent.putExtra(getString(R.string.intent_course_list), coursesFile);
                 startActivityForResult(intent, ASSIGNMENT_REQUEST);
             }
         });

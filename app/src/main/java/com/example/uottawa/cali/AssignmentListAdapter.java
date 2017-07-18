@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class AssignmentListAdapter extends ArrayAdapter {
-
+    private final int[] priorityImageIDs = new int[]{R.drawable.ic_p1, R.drawable.ic_p2, R.drawable.ic_p3, R.drawable.ic_p4, R.drawable.ic_p5};
     private Context context;
     private Assignment[] assignments;
 
@@ -35,6 +35,8 @@ public class AssignmentListAdapter extends ArrayAdapter {
 
         ImageView backgroundImage = (ImageView)rowView.findViewById(R.id.typeImageViewListElement);
         backgroundImage.setImageResource(assignment.getType().getImageID());
+        ImageView priorityImage = (ImageView)rowView.findViewById(R.id.priorityImageViewListElement);
+        priorityImage.setImageResource(priorityImageIDs[assignment.getPriority() - 1]);
 
         TextView dueDate = (TextView) rowView.findViewById(R.id.assignmentDateTextViewListElement);
         dueDate.setText(assignment.getDateString());

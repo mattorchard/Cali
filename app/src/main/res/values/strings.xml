@@ -32,6 +32,10 @@
     <string name="cancel_filter_dialog">Cancel</string>
     <string name="title_filter_dialog">Include classes</string>
 
+    <!--Course Dialog-->
+    <string name="title_course_dialog">Select a course:</string>
+
+
     <!--Settings Activity-->
     <string name="title_settings">Settings</string>
     <string name="sort_header_settings">Sort assignments by:</string>
@@ -64,6 +68,7 @@
     <string name="intent_course_operation">intent_course_operation</string>
     <string name="intent_course_data_send">intent_course_data_send</string>
     <string name="intent_course_data_receive">intent_course_data_receive</string>
+    <string name="intent_course_list">intent_course_list</string>
 
     <!--Preferences-->
     <string name="preference_file_key">com.example.uottawa.cali.preference_key</string>
