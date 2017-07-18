@@ -7,9 +7,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -88,7 +90,9 @@ public class ColorListDialog extends DialogFragment {
         ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
         params.width = LinearLayoutCompat.LayoutParams.WRAP_CONTENT;
         params.height = LinearLayoutCompat.LayoutParams.WRAP_CONTENT;
-        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+        Window window = getDialog().getWindow();
+        window.setLayout(900,1000);
+        window.setGravity(Gravity.CENTER);
         super.onResume();
     }
 }
