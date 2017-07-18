@@ -21,9 +21,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_back_arrow"
+            android:onClick="clickBack"
             android:scaleType="fitXY"
-            android:onClick="clickComplete"/>
+            android:src="@drawable/ic_back_arrow" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
