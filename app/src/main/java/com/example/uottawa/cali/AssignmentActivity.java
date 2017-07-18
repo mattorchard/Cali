@@ -157,6 +157,9 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
         }
     }
 
+    public void clickComplete(View v) {
+        onBackPressed();
+    }
     @Override
     public void onBackPressed() {
         assignment.setName(nameEditText.getText().toString());
