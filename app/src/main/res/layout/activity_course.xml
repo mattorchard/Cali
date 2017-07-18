@@ -38,7 +38,7 @@
                 android:layout_gravity="right"
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/ic_action_name" />
+                app:srcCompat="@drawable/ic_check" />
 
         </android.support.v7.widget.Toolbar>
 
