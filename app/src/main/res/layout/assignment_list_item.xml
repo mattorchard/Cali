@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="10dp">
+
+    android:background="@drawable/shadow" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +14,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/courseColor1"
-            android:id="@+id/assignmentProgressViewListElement"/>
+            android:id="@+id/assignmentProgressViewListElement" />
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -59,14 +60,14 @@
             android:layout_height="wrap_content"
             android:text="@string/dynamic_text_unset"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="23sp"
             android:id="@+id/assignmentTitleTextViewListElement"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dynamic_text_unset"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:id="@+id/assignmentDateTextViewListElement"/>
     </LinearLayout>
 
