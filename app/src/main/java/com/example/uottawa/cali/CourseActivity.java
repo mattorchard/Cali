@@ -20,6 +20,7 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class CourseActivity extends AppCompatActivity implements EditNameDialogListener{
@@ -27,11 +28,15 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
     private boolean isNew, isEditing, isTheSame;
     private Course course, oldCourse;
     private int colorId, indexOfOldCourse=-1;
+    private Integer secondaryColorId;
+    private HashMap<Integer, Integer> colorIndexMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course);
+        createHashMap();
 
         //Add a shadow to the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar);
@@ -40,7 +45,8 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
         Intent intent = getIntent();
         isNew = intent.getExtras().getBoolean("isNewCourse");
         if(isNew) {
-            colorId = R.color.colorPrimaryDark;
+            colorId = R.color.courseColor8;
+            secondaryColorId = colorIndexMap.get(colorId);
             isTheSame = false;
             switchToEdit();
 
@@ -70,14 +76,15 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                             }).show();
                 }
                 else {
-                    course = new Course(courseName.getText().toString(), colorId, colorId);
+                    /*Integer test = colorIndexMap.get(colorId);
+                    Toast.makeText(CourseActivity.this, Integer.toString(test), Toast.LENGTH_LONG).show();*/
+                    course = new Course(courseName.getText().toString(), colorId, secondaryColorId);
                     Intent intent = new Intent();
                     intent.putExtra(getString(R.string.intent_course_operation), FileOperations.MODIFY);
                     intent.putExtra(getString(R.string.intent_course_data_receive), course);
                     if (isEditing) {
                         indexOfOldCourse = getIntent().getExtras().getInt("oldCourseIndex");
                         intent.putExtra("oldCourseIndex", indexOfOldCourse);
-                        intent.putExtra("oldCourse", oldCourse);
                         intent.putExtra("shouldEdit", true);
                         setResult(RESULT_OK, intent);
                         finish();
@@ -114,6 +121,7 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
         course = (Course) getIntent().getExtras().getSerializable("course");
         colorCircle.setBackgroundTintList(ResourcesCompat.getColorStateList(this.getResources(), course.getColorIndex(), null));
         colorId = course.getColorIndex();
+        secondaryColorId = course.getColorInverseIndex();
         courseTitleText.setText(course.getName());
         oldCourse = course;
         ImageButton editButton = (ImageButton) findViewById(R.id.editCourseBtn);
@@ -122,6 +130,8 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
             public void onClick(View view) {
                 isEditing = true;
                 switchToEdit();
+                EditText courseName = (EditText) findViewById(R.id.editCourseTitle);
+                courseName.setText(course.getName());
             }
         });
     }
@@ -143,6 +153,7 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
     public void onFinishEditDialog(int colorId) {
         CardView colorCircle = (CardView) findViewById(R.id.colorCircle);
         this.colorId = colorId;
+        secondaryColorId = colorIndexMap.get(this.colorId);
         colorCircle.setBackgroundTintList(ResourcesCompat.getColorStateList(this.getResources(), colorId, null));
     }
 
@@ -159,7 +170,7 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         EditText courseName = (EditText) findViewById(R.id.editCourseTitle);
-                        course = new Course(courseName.getText().toString(), colorId, colorId);
+                        course = new Course(courseName.getText().toString(), colorId, secondaryColorId);
                         Intent intent = new Intent();
                         intent.putExtra(getString(R.string.intent_course_operation), FileOperations.MODIFY);
                         intent.putExtra(getString(R.string.intent_course_data_receive), course);
@@ -224,5 +235,17 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
             setResult(RESULT_OK, intent);
             finish();
         }
+    }
+    public void createHashMap() {
+        colorIndexMap = new HashMap<>();
+        colorIndexMap.put(R.color.courseColor1, R.color.courseColor0a);
+        colorIndexMap.put(R.color.courseColor5a, R.color.courseColor5);
+        colorIndexMap.put(R.color.courseColor3, R.color.courseColor3a);
+        colorIndexMap.put(R.color.courseColor7, R.color.courseColor7a);
+        colorIndexMap.put(R.color.courseColor4, R.color.courseColor4a);
+        colorIndexMap.put(R.color.courseColor2, R.color.courseColor2a);
+        colorIndexMap.put(R.color.courseColor6, R.color.courseColor6a);
+        colorIndexMap.put(R.color.courseColor3a, R.color.courseColor3);
+        colorIndexMap.put(R.color.courseColor8, R.color.courseColor8a);
     }
 }

@@ -8,8 +8,8 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/colorCircleSingle"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="20dp"
         android:backgroundTint="@color/colorPrimaryDark"
@@ -17,12 +17,12 @@
         android:innerRadius="0dp"
         android:shape="ring"
         android:thicknessRatio="1.9"
-        app:cardCornerRadius="20dp">
+        app:cardCornerRadius="10dp">
 
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="20dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"></ImageView>
 

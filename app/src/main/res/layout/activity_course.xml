@@ -53,7 +53,7 @@
                     android:layout_gravity="right"
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/ic_add_box_black_24dp" />
+                    app:srcCompat="@drawable/ic_add_icon" />
 
             </ViewSwitcher>
 
@@ -120,5 +120,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
