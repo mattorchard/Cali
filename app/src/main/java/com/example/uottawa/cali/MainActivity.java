@@ -239,7 +239,7 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
         final Assignment deleteMe = assignmentsFile.get(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.title_delete_dialog));
-        builder.setMessage(getString(R.string.message_delete_dialog) + " " + deleteMe.getName());
+        builder.setMessage(getString(R.string.message_delete_dialog) + " " + deleteMe.getName() + "?");
         builder.setPositiveButton(getString(R.string.positive_delete_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

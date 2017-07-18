@@ -338,7 +338,7 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
     public void deleteAssignment(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.title_delete_dialog));
-        builder.setMessage(getString(R.string.message_delete_dialog) + " " + nameEditText.getText().toString());
+        builder.setMessage(getString(R.string.message_delete_dialog) + " " + nameEditText.getText().toString() + "?");
         builder.setPositiveButton(getString(R.string.positive_delete_dialog), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -497,11 +497,8 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
 
     private void findAndRemoveLink(NamedLink namedLink) {
         for (NamedLink link : assignment.getNamedLinkList()) {
-            Log.d("Link", "NamedLink in assignment: " + link.getName() + ", " + link.getUrl());
-            Log.d("Link", "NamedLink in parameter: " + namedLink.getName() + ", " + namedLink.getUrl());
             if (link.equals(namedLink)) {
                 assignment.getNamedLinkList().remove(link);
-                Log.d("Link", "Removed the shit");
             }
         }
     }

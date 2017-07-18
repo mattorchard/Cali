@@ -6,6 +6,9 @@
 
     <string name="action_settings">Settings</string>
 
+    <!--Main activity-->
+    <string name="hamburger_menu_title">Course List</string>
+
     <!--Assignment activity-->
     <string name="name_header_assignment">Assignment Name</string>
     <string name="complete_header_assignment">Completion:</string>
@@ -24,7 +27,7 @@
 
     <!--Delete Dialog-->
     <string name="title_delete_dialog">Delete Assignment</string>
-    <string name="message_delete_dialog">Are you sure you want to delete the assignment:</string>
+    <string name="message_delete_dialog">Are you sure you want to delete</string>
     <string name="positive_delete_dialog">Delete</string>
     <string name="negative_delete_dialog">Cancel</string>
 

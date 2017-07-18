@@ -181,7 +181,7 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                             }
                             if(isTheSame) {
                                 final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
-                                alert.setMessage("Already a course with the same name\n" + "(Course name has to be unique)")
+                                alert.setMessage("A course with the same name already exists")
                                         .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int id) {
