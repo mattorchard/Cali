@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -349,16 +350,28 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
     }
 
     private void setSampleData() {
+        Calendar calendar = Calendar.getInstance();
         coursesFile = new ArrayList<>();
         assignmentsFile = new ArrayList<>();
         coursesFile.add(new Course("Networking", R.color.courseColor1, R.color.courseColor1a));
         coursesFile.add(new Course("UI Design", R.color.courseColor3, R.color.courseColor3a));
         coursesFile.add(new Course("Quality Assurance", R.color.courseColor5, R.color.courseColor5a));
-        Assignment tempAssignment = new Assignment(coursesFile.get(1), "App Presentation", 66, new Date(), 1, AssignmentTypes.GROUP_WORK, "asd");
+        coursesFile.add(new Course("Operating Systems", R.color.courseColor6, R.color.courseColor6a));
+        calendar.set(2017, 6, 19);
+        Assignment tempAssignment = new Assignment(coursesFile.get(1), "App Presentation", 0, new Date(), 1, AssignmentTypes.GROUP_WORK, "A presentation that is happening right now");
+        tempAssignment.getNamedLinkList().add(0, new NamedLink("Google","http://www.google.com"));
         assignmentsFile.add(tempAssignment);
-        tempAssignment = new Assignment(coursesFile.get(0), "Routing Lab #8", 75, new Date(), 2, AssignmentTypes.LAB_REPORT, "dsa");
+        calendar.set(2017, 6, 24);
+        tempAssignment = new Assignment(coursesFile.get(0), "Routing Lab #8", 75, calendar.getTime(), 2, AssignmentTypes.LAB_REPORT, "A description");
         assignmentsFile.add(tempAssignment);
-        tempAssignment = new Assignment(coursesFile.get(1), "Assignment #6", 20, new Date(), 4, AssignmentTypes.PROBLEM_SET, "sad");
+        calendar.set(2017, 6, 21);
+        tempAssignment = new Assignment(coursesFile.get(1), "Assignment #6", 20, calendar.getTime(), 4, AssignmentTypes.PROBLEM_SET, "Another description");
+        assignmentsFile.add(tempAssignment);
+        calendar.set(2017, 6, 25);
+        tempAssignment = new Assignment(coursesFile.get(2), "Final exam", 20, calendar.getTime(), 1, AssignmentTypes.STUDY, "A third descriptions");
+        assignmentsFile.add(tempAssignment);
+        calendar.set(2017, 6, 26);
+        tempAssignment = new Assignment(coursesFile.get(3), "Paging algorithms", 30, calendar.getTime(), 3, AssignmentTypes.project, "Another another description");
         assignmentsFile.add(tempAssignment);
     }
 

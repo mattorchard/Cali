@@ -33,7 +33,7 @@
             android:src="@drawable/ic_attach"
             android:tint="@color/white"
             android:layout_gravity="center"
-            android:alpha="0.2"/>
+            android:alpha="0.4"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
