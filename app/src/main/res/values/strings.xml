@@ -39,7 +39,6 @@
     <!--Course Dialog-->
     <string name="title_course_dialog">Select a course:</string>
 
-
     <!--Settings Activity-->
     <string name="title_settings">Settings</string>
     <string name="sort_header_settings">Sort assignments by:</string>
@@ -76,6 +75,7 @@
 
     <!--Preferences-->
     <string name="preference_file_key">com.example.uottawa.cali.preference_key</string>
+    <string name="first_boot_preferences">first_boot_preferences</string>
     <string name="priority_sort_preferences">priority_sort_preferences</string>
     <string name="due_sort_preferences">due_sort_preferences</string>
     <string name="complete_sort_preferences">complete_sort_preferences</string>
@@ -93,32 +93,14 @@
     <!--Misc-->
     <string name="fresh_assignment_name">New Assignment</string>
     <string name="dynamic_text_unset">Unset</string>
-    <string name="lorem_long">
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ac maximus mauris. Sed imperdiet vitae nunc ac consequat. Nullam ultrices urna non magna facilisis semper. Nulla ut mauris vitae leo convallis finibus. Aliquam vitae placerat sapien. Sed id euismod lectus. Vestibulum eu vestibulum dolor. Aliquam convallis urna quis vestibulum feugiat. Cras quam sem, sagittis eget ex vitae, vehicula blandit quam. Praesent bibendum pharetra nibh. Sed vulputate nibh vestibulum, molestie arcu ac, vehicula ligula. Ut auctor eleifend dolor eu placerat. Nam eros quam, vehicula vitae diam at, congue ornare velit. Duis mollis sapien laoreet turpis consectetur, ut mattis nulla pretium.
-
-Nulla sit amet eros tempus, aliquet enim eget, ultrices elit. Nam eros urna, elementum a ornare ac, tincidunt rhoncus quam. Ut fermentum id erat sit amet auctor. Integer vel tellus elementum urna luctus convallis. Fusce mattis nisl a justo porttitor, vel efficitur ante tempor. Duis varius dolor non justo dapibus pellentesque. Sed venenatis, massa sit amet vehicula iaculis, turpis eros congue justo, vulputate ultrices est nisi in neque.
-
-Donec eu ligula vehicula, finibus lectus sit amet, pulvinar ipsum. Vivamus accumsan odio nibh, vel tempus arcu volutpat et. Nulla sed commodo urna. Morbi dapibus nisi enim, non dictum dui efficitur nec. Nunc id dolor quis dui accumsan cursus vitae sit amet eros. Quisque fringilla sodales turpis, eu tempor elit egestas vitae. Nam rutrum luctus turpis sed interdum. Ut aliquet nulla in mauris malesuada, vel feugiat ligula mollis. Aenean aliquet, nisi vulputate placerat sollicitudin, justo eros pellentesque diam, vel consectetur risus ligula et massa. Fusce ornare consequat metus, vitae cursus leo ultrices a. Donec urna purus, consectetur sed aliquam non, dapibus vel diam. Aliquam efficitur venenatis nulla at porta.
-
-Cras blandit erat id tempus faucibus. Duis consectetur vehicula suscipit. Curabitur lacus mauris, posuere sed nisl vel, pellentesque posuere lorem. In id velit id erat ornare pulvinar. Praesent et tincidunt tellus. Aliquam suscipit mi lacus, id pellentesque orci scelerisque tincidunt. Donec dictum dui ac blandit pulvinar. Suspendisse consectetur eros quis nibh vestibulum, nec dapibus felis rhoncus. Vestibulum leo velit, semper vel metus et, pharetra fermentum nunc. Quisque feugiat ex purus, sed varius dolor consectetur blandit. Donec rhoncus quis quam vel accumsan. Praesent ullamcorper tincidunt finibus. Morbi eu sollicitudin enim. Aliquam nec risus mi. Duis eu efficitur diam. Cras augue eros, sodales eu mattis at, gravida non nulla.
-
-Pellentesque porta sapien non tortor interdum, quis mollis est scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur et blandit arcu. Sed convallis purus ullamcorper sapien laoreet aliquet. Aenean in nisl enim. Quisque porta, augue at pellentesque auctor, elit mi rhoncus metus, sed vulputate augue sapien in lorem. Phasellus ultricies eu dolor nec venenatis. Vivamus luctus at eros a vestibulum. Phasellus arcu tortor, facilisis vitae est non, tempor lobortis sem. Integer blandit ligula at lorem tristique, quis rhoncus mauris tempus. Nunc placerat, risus id consectetur egestas, eros dolor ultricies urna, quis lobortis turpis augue id lorem. Ut posuere, augue tristique auctor ornare, urna eros ornare erat, ac tempor odio nulla in purus. Maecenas porttitor eu augue nec volutpat.
-
-Quisque tellus ipsum, gravida non consectetur sit amet, tristique vel nisl. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In hac habitasse platea dictumst. In dui elit, aliquet sit amet imperdiet ut, eleifend eget nunc. Vivamus justo metus, tempus vel nisi bibendum, porttitor facilisis ipsum. Suspendisse urna justo, blandit sed feugiat nec, lobortis non nisi. Quisque ac enim vel neque gravida faucibus vitae sit amet sapien. Nulla consectetur neque ac ligula consectetur ullamcorper.
-
-Vestibulum vel vulputate nisi, a cursus massa. Nam interdum diam non sem pharetra scelerisque. Morbi scelerisque est sed nunc eleifend, vel pharetra lorem pellentesque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam erat volutpat. In hac habitasse platea dictumst. Nullam maximus elit vitae posuere blandit. Nullam rutrum velit quis dapibus suscipit. Morbi egestas a mauris et venenatis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam dolor quam, ornare quis ornare non, viverra sed nisl.
-
-Quisque pretium consequat imperdiet. Nullam et nulla nisi. Vestibulum eget metus quis mi fermentum tincidunt ullamcorper sed felis. Vivamus ornare, urna vel euismod mollis, est lacus feugiat leo, eget malesuada est velit et magna. Pellentesque nisl leo, facilisis sed fermentum non, tincidunt quis urna. Suspendisse libero sapien, pretium et nunc et, facilisis fringilla quam. Ut condimentum justo vel elementum varius.
-
-Mauris in cursus mauris. Morbi dapibus pulvinar ex et molestie. Suspendisse elementum dui congue augue sollicitudin sagittis. Aenean porttitor aliquam diam, consectetur accumsan nisi fermentum eu. Cras ultricies tortor eget magna molestie, ut consequat augue vulputate. Proin vitae mauris at sem laoreet egestas sed quis elit. Etiam vulputate et arcu vitae dictum. Morbi commodo at lorem non semper. Donec dapibus augue magna, sit amet viverra turpis fringilla eu. Morbi et mi eget diam ultricies euismod nec et tortor. Fusce eu velit eleifend, venenatis augue non, sodales urna. Praesent blandit accumsan nunc et tristique. Nulla quis magna et neque dignissim interdum ac a ipsum. Vivamus sit amet faucibus nunc.
-
-Phasellus fermentum id velit eu porta. In aliquet tempus purus vitae sollicitudin. Proin mollis risus metus, in vehicula enim tincidunt eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed iaculis iaculis enim at ullamcorper. Duis eget vehicula neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    </string>
     <string name="add_course">Add a course</string>
     <string name="course_name">Course name</string>
     <string name="title_activity_settings">Settings</string>
     <string name="dialog_course_color">Pick a course colour</string>
     <string name="choose_course_secondary_color">Choose the secondary course color</string>
+
+    <string name="no_assignments_error">Looks, like you don\'t have any assignments. To add a new assignment add press the plus icon in the bottom right.</string>
+    <string name="over_filter_error">There are no assignments that match your filtering options</string>
     <!--
     <
 

@@ -30,9 +30,11 @@ public class AssignmentListAdapter extends ArrayAdapter {
         View rowView = inflater.inflate(R.layout.assignment_list_item, parent, false);
 
         TextView title = (TextView) rowView.findViewById(R.id.assignmentTitleTextViewListElement);
-
-        title.setText(assignment.getCourse().getName() + ": " + assignment.getName());
-
+        if (assignment.getCourse().getName().equals(Course.getUnsetCourse().getName())) {
+            title.setText(assignment.getName());
+        } else {
+            title.setText(assignment.getCourse().getName() + ": " + assignment.getName());
+        }
         ImageView backgroundImage = (ImageView)rowView.findViewById(R.id.typeImageViewListElement);
         backgroundImage.setImageResource(assignment.getType().getImageID());
         ImageView priorityImage = (ImageView)rowView.findViewById(R.id.priorityImageViewListElement);
@@ -48,6 +50,5 @@ public class AssignmentListAdapter extends ArrayAdapter {
         progressInverse.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 100 - assignment.getComplete()));
         progressInverse.setBackgroundResource(assignment.getCourse().getColorInverseIndex());
         return rowView;
-
     }
 }

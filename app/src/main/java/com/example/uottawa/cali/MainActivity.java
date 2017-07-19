@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -96,8 +97,21 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
         });
 
         //ListView
-        setSampleData();
+        //setSampleData();
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        if (sharedPref.getBoolean(getString(R.string.first_boot_preferences), true)) {
+            setSampleData();
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean(getString(R.string.first_boot_preferences), false);
+            editor.commit();
+        } else {
+            if (!readData()) {
+                failedToRead();
+            }
+        }
+
         reloadAssignments();
+        //writeData();
         ListView summaryListView = (ListView)findViewById(R.id.summaryListViewMain);
         summaryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -294,10 +308,16 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
                 .setNegativeButton(R.string.cancel_filter_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getBaseContext(), "Wow Clicked cancel", Toast.LENGTH_SHORT).show();
+
                     }
                 });
         builder.create().show();
+    }
+
+    private void failedToRead() {
+        Toast.makeText(getBaseContext(), "Failed to read from disk", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Loading sample data", Toast.LENGTH_LONG).show();
+        setSampleData();
     }
 
     private void reloadAssignments() {
@@ -312,10 +332,14 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
         boolean due = (sharedPref.getBoolean(getString(R.string.due_sort_preferences), true));
         boolean complete = (sharedPref.getBoolean(getString(R.string.complete_sort_preferences), true));
         boolean priority = (sharedPref.getBoolean(getString(R.string.priority_sort_preferences), true));
+        boolean allHidden = true;
         for (Assignment assignment : assignmentsFile) {
             assignment.setVisible(!blackList.contains(assignment.getCourse()));
             if (assignment.getVisible() && ((assignment.getDueDate().getTime() - today) < - 86400 && assignment.getComplete() == 100) && !sharedPref.getBoolean(getString(R.string.completed_assignments_preferences), false)) {
                 assignment.setVisible(false);
+            }
+            if (assignment.getVisible()) {
+                allHidden = false;
             }
             double rank = 0;
             if (due) {
@@ -338,6 +362,14 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
         ListView summaryListView = (ListView)findViewById(R.id.summaryListViewMain);
         summaryListView.invalidateViews();
         summaryListView.setAdapter(summaryListViewAdapter);
+        TextView errorTextView = (TextView)findViewById(R.id.errorTextViewMain);
+        if (allHidden || assignmentsFile.size() == 0) {
+            errorTextView.setVisibility(View.VISIBLE);
+            errorTextView.setText(getString((assignmentsFile.size() == 0)? R.string.no_assignments_error : R.string.over_filter_error));
+        } else {
+            errorTextView.setVisibility(View.GONE);
+        }
+        writeData();
     }
 
     private void updateFilter(ArrayList<Integer> changed, ArrayList<Boolean> state) {
