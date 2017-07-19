@@ -1,10 +1,13 @@
 package com.example.uottawa.cali;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
@@ -63,6 +66,7 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
     private static LinkedList<String> urlList;
 
     private Calendar currentDate;
+    private Calendar alarmTime;
 
 
 
@@ -134,6 +138,7 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
 
         //Update the current date calendar
         currentDate = Calendar.getInstance();
+        alarmTime = Calendar.getInstance();
         currentDate.setTime(assignment.getDueDate());
 
         //Repopulate the attachments and links if they exist
@@ -168,6 +173,12 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
         if (fresh) {
             intent.putExtra(getString(R.string.intent_assignment_operation), FileOperations.MODIFY);
             intent.putExtra(getString(R.string.intent_assignment_data_receive), assignment);
+            SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            int count = sharedPref.getInt("assignmentCount", 0); //0 is default value.
+            count++;
+            SharedPreferences.Editor edit = sharedPref.edit();
+            edit.putInt("assignmentCount", count);
+            edit.commit();
         } else if (!assignment.equals(assignmentOriginal)) {
             intent.putExtra(getString(R.string.intent_assignment_operation), FileOperations.MODIFY);
             intent.putExtra(getString(R.string.intent_assignment_data_receive), assignment);
@@ -607,6 +618,7 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
         String date = month + " " + dayOfMonth;
 
         //Update the currentDate object
+        currentDate.setTimeInMillis(System.currentTimeMillis());
         currentDate.set(Calendar.YEAR, year);
         currentDate.set(Calendar.MONTH, monthOfYear);
         currentDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -614,5 +626,33 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
         //Update the saved due date and the TextView
         assignment.setDueDate(currentDate.getTime());
         dueTextView.setText(date);
+
+        //Setting the notification to send 2 days before the due date
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        int count = sharedPref.getInt("assignmentCount", 0); //0 is default value.
+        boolean isUpcomingNotificationOn = sharedPref.getBoolean(getString(R.string.upcoming_notification_preferences), true);
+        boolean isDailyNotificationOn = sharedPref.getBoolean(getString(R.string.daily_notification_preferences), true);
+
+        Intent intent = new Intent(AssignmentActivity.this, MyReceiver.class);
+        intent.putExtra("Assignment", assignment.getNotificationString());
+        intent.putExtra("isUpcomingNotificationOn", isUpcomingNotificationOn);
+        intent.putExtra("isDailyNotificationOn", isDailyNotificationOn);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(AssignmentActivity.this, count, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        if(isUpcomingNotificationOn) {
+            alarmTime.setTimeInMillis(currentDate.getTimeInMillis() - 48 * 60 * 60 * 1000);
+            alarmTime.set(Calendar.HOUR_OF_DAY, 9);
+            alarmTime.set(Calendar.MINUTE, 0);
+            alarmTime.set(Calendar.SECOND, 0);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis() , pendingIntent);
+        } else if (isDailyNotificationOn) {
+            alarmTime.setTimeInMillis(currentDate.getTimeInMillis() + 24 * 60 * 60 * 1000);
+            alarmTime.set(Calendar.HOUR_OF_DAY, 9);
+            alarmTime.set(Calendar.MINUTE, 0);
+            alarmTime.set(Calendar.SECOND, 0);
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
+        /*Toast.makeText(this, String.valueOf(alarmTime.getTime().toString()), Toast.LENGTH_LONG).show();*/
     }
 }

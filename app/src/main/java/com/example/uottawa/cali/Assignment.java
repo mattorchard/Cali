@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -147,5 +148,56 @@ public class Assignment implements Serializable, Comparable<Assignment> {
     @Override
     public int compareTo(@NonNull Assignment o) {
         return Double.valueOf(rank).compareTo(o.getRank());
+    }
+
+    public String getNotificationString() {
+        Calendar tCalendar = Calendar.getInstance();
+        tCalendar.setTime(this.dueDate);
+        String month = "January";
+        switch (tCalendar.get(Calendar.MONTH)) {
+            case 0:
+                month = "January";
+                break;
+            case 1:
+                month = "February";
+                break;
+            case 2:
+                month = "March";
+                break;
+            case 3:
+                month = "April";
+                break;
+            case 4:
+                month = "May";
+                break;
+            case 5:
+                month = "June";
+                break;
+            case 6:
+                month = "July";
+                break;
+            case 7:
+                month = "August";
+                break;
+            case 8:
+                month = "September";
+                break;
+            case 9:
+                month = "October";
+                break;
+            case 10:
+                month = "November";
+                break;
+            case 11:
+                month = "December";
+                break;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.name+" ");
+        stringBuilder.append("Due on: "+month);
+        stringBuilder.append(" "+tCalendar.get(Calendar.DAY_OF_MONTH));
+        stringBuilder.append(" at "+tCalendar.get(Calendar.HOUR));
+        stringBuilder.append(":"+tCalendar.get(Calendar.MINUTE));
+        return stringBuilder.toString();
     }
 }
