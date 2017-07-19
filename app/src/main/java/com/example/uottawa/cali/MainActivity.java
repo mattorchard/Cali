@@ -165,13 +165,18 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
                 FileOperations courseOperation = (FileOperations)data.getSerializableExtra(getString(R.string.intent_course_operation));
                 if(FileOperations.MODIFY == courseOperation) {
                     Course freshCourse = (Course)data.getSerializableExtra(getString(R.string.intent_course_data_receive));
-                    if(data.getBooleanExtra("shouldEdit", false)==false) {
+                    if(!data.getBooleanExtra("shouldEdit", false)) {
                         coursesFile.add(freshCourse);
                     } else {
                         int index = data.getIntExtra("oldCourseIndex", -1);
-                        coursesFile.set(index, freshCourse);
+                        coursesFile.get(index).setName(freshCourse.getName());
+                        coursesFile.get(index).setColorIndex(freshCourse.getColorIndex());
+                        coursesFile.get(index).setColorInverseIndex(freshCourse.getColorInverseIndex());
+                        //coursesFile.set(index, freshCourse);
                     }
                     drawerAdapter.notifyDataSetChanged();
+                    reloadCourses();
+                    reloadAssignments();
                 }
             }
         }
@@ -309,7 +314,7 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
         boolean priority = (sharedPref.getBoolean(getString(R.string.priority_sort_preferences), true));
         for (Assignment assignment : assignmentsFile) {
             assignment.setVisible(!blackList.contains(assignment.getCourse()));
-            if (assignment.getVisible() && ((assignment.getDueDate().getTime() - today) < 0 && assignment.getComplete() == 100) && !sharedPref.getBoolean(getString(R.string.completed_assignments_preferences), false)) {
+            if (assignment.getVisible() && ((assignment.getDueDate().getTime() - today) < - 86400 && assignment.getComplete() == 100) && !sharedPref.getBoolean(getString(R.string.completed_assignments_preferences), false)) {
                 assignment.setVisible(false);
             }
             double rank = 0;
@@ -352,26 +357,27 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
     private void setSampleData() {
         Calendar calendar = Calendar.getInstance();
         coursesFile = new ArrayList<>();
+        coursesFile.add(Course.getUnsetCourse());
         assignmentsFile = new ArrayList<>();
         coursesFile.add(new Course("Networking", R.color.courseColor1, R.color.courseColor1a));
         coursesFile.add(new Course("UI Design", R.color.courseColor3, R.color.courseColor3a));
         coursesFile.add(new Course("Quality Assurance", R.color.courseColor5, R.color.courseColor5a));
         coursesFile.add(new Course("Operating Systems", R.color.courseColor6, R.color.courseColor6a));
         calendar.set(2017, 6, 19);
-        Assignment tempAssignment = new Assignment(coursesFile.get(1), "App Presentation", 0, new Date(), 1, AssignmentTypes.GROUP_WORK, "A presentation that is happening right now");
+        Assignment tempAssignment = new Assignment(coursesFile.get(2), "App Presentation", 0, new Date(), 1, AssignmentTypes.GROUP_WORK, "A presentation that is happening right now");
         tempAssignment.getNamedLinkList().add(0, new NamedLink("Google","http://www.google.com"));
         assignmentsFile.add(tempAssignment);
         calendar.set(2017, 6, 24);
-        tempAssignment = new Assignment(coursesFile.get(0), "Routing Lab #8", 75, calendar.getTime(), 2, AssignmentTypes.LAB_REPORT, "A description");
+        tempAssignment = new Assignment(coursesFile.get(1), "Routing Lab #8", 75, calendar.getTime(), 2, AssignmentTypes.LAB_REPORT, "A description");
         assignmentsFile.add(tempAssignment);
         calendar.set(2017, 6, 21);
-        tempAssignment = new Assignment(coursesFile.get(1), "Assignment #6", 20, calendar.getTime(), 4, AssignmentTypes.PROBLEM_SET, "Another description");
+        tempAssignment = new Assignment(coursesFile.get(2), "Assignment #6", 20, calendar.getTime(), 4, AssignmentTypes.PROBLEM_SET, "Another description");
         assignmentsFile.add(tempAssignment);
         calendar.set(2017, 6, 25);
-        tempAssignment = new Assignment(coursesFile.get(2), "Final exam", 20, calendar.getTime(), 1, AssignmentTypes.STUDY, "A third descriptions");
+        tempAssignment = new Assignment(coursesFile.get(3), "Final exam", 20, calendar.getTime(), 1, AssignmentTypes.STUDY, "A third descriptions");
         assignmentsFile.add(tempAssignment);
         calendar.set(2017, 6, 26);
-        tempAssignment = new Assignment(coursesFile.get(3), "Paging algorithms", 30, calendar.getTime(), 3, AssignmentTypes.project, "Another another description");
+        tempAssignment = new Assignment(coursesFile.get(4), "Paging algorithms", 30, calendar.getTime(), 3, AssignmentTypes.project, "Another another description");
         assignmentsFile.add(tempAssignment);
     }
 
@@ -393,10 +399,10 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
                         switch (option) {
                             case 0:
                                 AlertDialog.Builder confirmation = new AlertDialog.Builder(MainActivity.this);
-                                confirmation.setMessage("Are you sure you want to delete this entry?")
+                                confirmation.setMessage("Are you sure you want to delete this course?")
                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
-                                                coursesFile.remove(courseSelected);
+                                                deleteCourse(courseSelected);
                                                 drawerAdapter.notifyDataSetChanged();
                                             }
                                         })
@@ -414,5 +420,16 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
                 return true;
             }
         });
+    }
+    public void deleteCourse(int position) {
+        Course deleteMe = coursesFile.get(position);
+        for (Assignment assignment : assignmentsFile) {
+            if (assignment.getCourse() == deleteMe || assignment.getCourse().getName().equals(deleteMe.getName())) {
+                assignment.setCourse(Course.getUnsetCourse());
+            }
+        }
+        coursesFile.remove(deleteMe);
+        reloadCourses();
+        reloadAssignments();
     }
 }

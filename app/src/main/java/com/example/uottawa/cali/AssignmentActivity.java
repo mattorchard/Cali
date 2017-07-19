@@ -162,24 +162,20 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
     }
 
     public void clickComplete(View v) {
+        assignment.setName(nameEditText.getText().toString());
+        assignment.setDescription(descriptionEditText.getText().toString());
+        Intent intent = new Intent();
         if (fresh) {
-            Intent intent = new Intent();
             intent.putExtra(getString(R.string.intent_assignment_operation), FileOperations.MODIFY);
             intent.putExtra(getString(R.string.intent_assignment_data_receive), assignment);
-            setResult(RESULT_OK, intent);
-            finish();
         } else if (!assignment.equals(assignmentOriginal)) {
-            Intent intent = new Intent();
             intent.putExtra(getString(R.string.intent_assignment_operation), FileOperations.MODIFY);
             intent.putExtra(getString(R.string.intent_assignment_data_receive), assignment);
-            setResult(RESULT_OK, intent);
-            finish();
         }  else {
-            Intent intent = new Intent();
             intent.putExtra(getString(R.string.intent_assignment_operation), FileOperations.UNCHANGED);
-            setResult(RESULT_OK, intent);
-            finish();
-        }
+       }
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override

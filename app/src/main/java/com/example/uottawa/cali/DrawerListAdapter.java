@@ -13,9 +13,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by Quang-Tri on 13/07/2017.
- */
 
 public class DrawerListAdapter extends ArrayAdapter {
 
@@ -30,12 +27,15 @@ public class DrawerListAdapter extends ArrayAdapter {
 
     public View getView(int position, View view, ViewGroup parent) {
 
+        if (courses.get(position) == Course.getUnsetCourse()) {
+            return new View(context);
+        }
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.list_single, null, true);
         TextView courseText = (TextView) rowView.findViewById(R.id.txt);
         CardView colorCircle = (CardView) rowView.findViewById(R.id.colorCircle);
-        int colorIndex = courses.get(position).getColorIndex();
 
+        int colorIndex = courses.get(position).getColorIndex();
         colorCircle.setBackgroundTintList(context.getResources().getColorStateList(colorIndex));
         courseText.setText(courses.get(position).getName());
 

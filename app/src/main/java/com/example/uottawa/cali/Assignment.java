@@ -11,8 +11,7 @@ import java.util.Locale;
 
 public class Assignment implements Serializable, Comparable<Assignment> {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d", Locale.getDefault());
-    private static final Course unsetCourse = new Course("Unset", R.color.courseColor0, R.color.courseColor0a);
-    private Course course = unsetCourse;
+    private Course course = Course.getUnsetCourse();
     private String name = "";
     private int complete = 0;
     private Date dueDate = new Date();
