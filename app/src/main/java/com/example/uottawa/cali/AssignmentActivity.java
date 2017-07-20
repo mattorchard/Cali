@@ -406,21 +406,13 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
     }
 
     public void changeDate(View v){
-        Calendar now = Calendar.getInstance();
-        DatePickerDialog datePicker = null;
 
-        //If no date has been set yet, let's start the calendar from today's date
-
-
-        //Otherwise, start the calendar from the last set date
-
-        datePicker = DatePickerDialog.newInstance(
+        DatePickerDialog datePicker = DatePickerDialog.newInstance(
                 AssignmentActivity.this,
                 currentDate.get(currentDate.YEAR),
                 currentDate.get(currentDate.MONTH),
                 currentDate.get(currentDate.DAY_OF_MONTH)
         );
-
 
         datePicker.show(getFragmentManager(), "Due date");
     }
