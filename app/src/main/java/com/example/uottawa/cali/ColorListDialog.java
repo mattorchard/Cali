@@ -23,16 +23,12 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Created by Quang-Tri on 16/07/2017.
- */
-
 
 public class ColorListDialog extends DialogFragment {
 
-    private Integer[] color1 = new Integer[] {R.color.courseColor1, R.color.courseColor5a, R.color.courseColor3};
+    private Integer[] color1 = new Integer[] {R.color.courseColor1, R.color.courseColor5, R.color.courseColor3};
     private Integer[] color2 = new Integer[] {R.color.courseColor7, R.color.courseColor4, R.color.courseColor2};
-    private Integer[] color3 = new Integer[] {R.color.courseColor6, R.color.courseColor3a, R.color.courseColor8};
+    private Integer[] color3 = new Integer[] {R.color.courseColor6, R.color.courseColor9, R.color.courseColor8};
     private int colorId;
     private EditNameDialogListener listener;
 
@@ -90,9 +86,11 @@ public class ColorListDialog extends DialogFragment {
         ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
         params.width = LinearLayoutCompat.LayoutParams.WRAP_CONTENT;
         params.height = LinearLayoutCompat.LayoutParams.WRAP_CONTENT;
+
         Window window = getDialog().getWindow();
-        window.setLayout(900,1000);
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,700);
         window.setGravity(Gravity.CENTER);
+
         super.onResume();
     }
 }

@@ -27,7 +27,7 @@ public class DrawerListAdapter extends ArrayAdapter {
 
     public View getView(int position, View view, ViewGroup parent) {
 
-        if (courses.get(position) == Course.getUnsetCourse()) {
+        if (courses.get(position).getName().equals(Course.getUnsetCourse().getName())) {
             return new View(context);
         }
         LayoutInflater inflater = context.getLayoutInflater();

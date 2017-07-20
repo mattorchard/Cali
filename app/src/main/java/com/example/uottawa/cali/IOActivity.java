@@ -34,10 +34,23 @@ public class IOActivity extends AppCompatActivity{
             return false;
         }
         for (Assignment assignment : assignmentsFile) {
+            if (assignment.getCourse().getName().equals(Course.getUnsetCourse().getName())) {
+                assignment.setCourse(Course.getUnsetCourse());
+            }
             if (!coursesFile.contains(assignment.getCourse())) {
                 coursesFile.add(assignment.getCourse());
             }
         }
+
+        for (int i = 0; i < coursesFile.size(); i ++) {
+            if (coursesFile.get(i).getName().equals(Course.getUnsetCourse().getName())) {
+                coursesFile.set(i, Course.getUnsetCourse());
+            }
+        }
+        while(coursesFile.contains(Course.getUnsetCourse())) {
+            coursesFile.remove(Course.getUnsetCourse());
+        }
+        coursesFile.add(Course.getUnsetCourse());
         return true;
     }
     protected boolean writeData() {

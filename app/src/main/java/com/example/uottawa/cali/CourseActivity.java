@@ -86,10 +86,12 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                         finish();
                     } else {
                         ArrayList<Course> courses = (ArrayList<Course>) getIntent().getExtras().getSerializable("courseArrayList");
+
                         Iterator<Course> iter = courses.iterator();
                         while(iter.hasNext()) {
                             Course currentCourse = iter.next();
-                            if((currentCourse.getName().equals(course.getName())) && (currentCourse.getColorIndex() == course.getColorIndex())) {
+                            if((currentCourse.getName().equals(course.getName()))) {
+                                //&& (currentCourse.getColorIndex() == course.getColorIndex())
                                 isTheSame = true;
                             }
                         }
@@ -178,7 +180,8 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                             Iterator<Course> iter = courses.iterator();
                             while (iter.hasNext()) {
                                 Course currentCourse = iter.next();
-                                if ((currentCourse.getName().equals(course.getName())) && (currentCourse.getColorIndex() == course.getColorIndex())) {
+                                if ((currentCourse.getName().equals(course.getName()))) {
+                                    // && (currentCourse.getColorIndex() == course.getColorIndex())
                                     isTheSame = true;
                                 }
                             }
@@ -232,7 +235,7 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
         colorIndexMap.put(R.color.courseColor4, R.color.courseColor4a);
         colorIndexMap.put(R.color.courseColor2, R.color.courseColor2a);
         colorIndexMap.put(R.color.courseColor6, R.color.courseColor6a);
-        colorIndexMap.put(R.color.courseColor3a, R.color.courseColor3);
+        colorIndexMap.put(R.color.courseColor9, R.color.courseColor9a);
         colorIndexMap.put(R.color.courseColor8, R.color.courseColor8a);
     }
 }

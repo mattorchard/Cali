@@ -17,6 +17,7 @@
     <color name="courseColor6">#F9A825</color>
     <color name="courseColor7">#D84315</color>
     <color name="courseColor8">#37474f</color>
+    <color name="courseColor9">#FF91E7</color>
     <color name="courseColor0a">#7D848E</color>
     <color name="courseColor1a">#d44d4d</color>
     <color name="courseColor2a">#9744c9</color>
@@ -26,4 +27,5 @@
     <color name="courseColor6a">#FFBD53</color>
     <color name="courseColor7a">#D87354</color>
     <color name="courseColor8a">#596C75</color>
+    <color name="courseColor9a">#F9C5EE</color>
 </resources>
