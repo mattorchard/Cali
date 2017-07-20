@@ -25,7 +25,7 @@ import java.util.Iterator;
 
 public class CourseActivity extends AppCompatActivity implements EditNameDialogListener{
 
-    private boolean isNew, isEditing, isTheSame;
+    private boolean isNew, isEditing, isTheSame, isUnset;
     private Course course, oldCourse;
     private int colorId, indexOfOldCourse=-1;
     private Integer secondaryColorId;
@@ -61,6 +61,8 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isUnset = false;
+                isTheSame = false;
                 EditText courseName = (EditText) findViewById(R.id.editCourseTitle);
                 if(courseName.getText().length() == 0) {
                     final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
@@ -71,6 +73,9 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                                 }
                             }).show();
                 }
+                else if (isEditing && (oldCourse.getName().equals(courseName.getText().toString())) && (oldCourse.getColorIndex() == colorId)) {
+                    finish();
+                }
                 else {
                     /*Integer test = colorIndexMap.get(colorId);
                     Toast.makeText(CourseActivity.this, Integer.toString(test), Toast.LENGTH_LONG).show();*/
@@ -78,35 +83,42 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                     Intent intent = new Intent();
                     intent.putExtra(getString(R.string.intent_course_operation), FileOperations.MODIFY);
                     intent.putExtra(getString(R.string.intent_course_data_receive), course);
-                    if (isEditing) {
+                    ArrayList<Course> courses = (ArrayList<Course>) getIntent().getExtras().getSerializable("courseArrayList");
+                    Iterator<Course> iter = courses.iterator();
+                    while(iter.hasNext()) {
+                        Course currentCourse = iter.next();
+                        if (currentCourse.getName().equals(course.getName()) && !course.getName().equals(Course.getUnsetCourse().getName())) {
+                            isTheSame = true;
+                        }
+                    }
+                    if(course.getName().equals(Course.getUnsetCourse().getName())) {
+                        isUnset = true;
+                    }
+                    if (isEditing && !isTheSame && !isUnset) {
                         indexOfOldCourse = getIntent().getExtras().getInt("oldCourseIndex");
                         intent.putExtra("oldCourseIndex", indexOfOldCourse);
                         intent.putExtra("shouldEdit", true);
                         setResult(RESULT_OK, intent);
                         finish();
+                    } else if(isTheSame) {
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
+                        alert.setMessage("Already a course with the same name\n" + "(Course name has to be unique)")
+                                .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int id) {
+                                    }
+                                }).show();
+                    } else if(isUnset) {
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
+                        alert.setMessage("A course cannot have the name Unset")
+                                .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int id) {
+                                    }
+                                }).show();
                     } else {
-                        ArrayList<Course> courses = (ArrayList<Course>) getIntent().getExtras().getSerializable("courseArrayList");
-
-                        Iterator<Course> iter = courses.iterator();
-                        while(iter.hasNext()) {
-                            Course currentCourse = iter.next();
-                            if((currentCourse.getName().equals(course.getName()))) {
-                                //&& (currentCourse.getColorIndex() == course.getColorIndex())
-                                isTheSame = true;
-                            }
-                        }
-                        if(isTheSame) {
-                            final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
-                            alert.setMessage("Already a course with the same name\n" + "(Course name has to be unique)")
-                                    .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int id) {
-                                        }
-                                    }).show();
-                        } else {
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        }
+                        setResult(RESULT_OK, intent);
+                        finish();
                     }
                 }
             }
@@ -151,6 +163,7 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
     @Override
     public void onBackPressed() {
         isTheSame = false;
+        isUnset = false;
         EditText courseName = (EditText) findViewById(R.id.editCourseTitle);
         if (isEditing && (oldCourse.getName().equals(courseName.getText().toString())) && (oldCourse.getColorIndex() == colorId)) {
             finish();
@@ -168,35 +181,44 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                         Intent intent = new Intent();
                         intent.putExtra(getString(R.string.intent_course_operation), FileOperations.MODIFY);
                         intent.putExtra(getString(R.string.intent_course_data_receive), course);
-                        if (isEditing) {
+                        ArrayList<Course> courses = (ArrayList<Course>) getIntent().getExtras().getSerializable("courseArrayList");
+                        Iterator<Course> iter = courses.iterator();
+                        while(iter.hasNext()) {
+                            Course currentCourse = iter.next();
+                            if (currentCourse.getName().equals(course.getName()) && !course.getName().equals(Course.getUnsetCourse().getName())) {
+                                isTheSame = true;
+                            }
+                        }
+                        if(course.getName().equals(Course.getUnsetCourse().getName())) {
+                            isUnset = true;
+                        }
+                        if (isEditing && !isTheSame && !isUnset) {
                             indexOfOldCourse = getIntent().getExtras().getInt("oldCourseIndex");
                             intent.putExtra("oldCourseIndex", indexOfOldCourse);
                             intent.putExtra("oldCourse", oldCourse);
                             intent.putExtra("shouldEdit", true);
                             setResult(RESULT_OK, intent);
                             finish();
-                        } else {
-                            ArrayList<Course> courses = (ArrayList<Course>) getIntent().getExtras().getSerializable("courseArrayList");
-                            Iterator<Course> iter = courses.iterator();
-                            while (iter.hasNext()) {
-                                Course currentCourse = iter.next();
-                                if ((currentCourse.getName().equals(course.getName()))) {
-                                    // && (currentCourse.getColorIndex() == course.getColorIndex())
-                                    isTheSame = true;
-                                }
-                            }
-                            if (isTheSame) {
-                                final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
-                                alert.setMessage("A course with the same name already exists")
-                                        .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int id) {
-                                            }
-                                        }).show();
-                            } else {
-                                setResult(RESULT_OK, intent);
-                                finish();
-                            }
+                        } else if (isTheSame) {
+                            final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
+                            alert.setMessage("A course with the same name already exists")
+                                    .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int id) {
+                                        }
+                                    }).show();
+                        } else if (isUnset) {
+                            final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
+                            alert.setMessage("A course cannot have the name Unset")
+                                    .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int id) {
+                                        }
+                                    }).show();
+                        }
+                        else {
+                            setResult(RESULT_OK, intent);
+                            finish();
                         }
                     }
                 });

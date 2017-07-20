@@ -147,8 +147,8 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
                 Intent intent = new Intent(getBaseContext(), CourseActivity.class);
                 intent.putExtra("course", item);
                 intent.putExtra("isNewCourse", false);
-                /*Toast.makeText(MainActivity.this, String.valueOf(position), Toast.LENGTH_LONG).show();*/
                 intent.putExtra("oldCourseIndex", position);
+                intent.putExtra("courseArrayList", coursesFile);
                 startActivityForResult(intent, COURSE_REQUEST);
             }
         });
