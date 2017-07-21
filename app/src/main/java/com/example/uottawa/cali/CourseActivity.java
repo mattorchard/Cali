@@ -177,7 +177,8 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
         EditText courseName = (EditText) findViewById(R.id.editCourseTitle);
         if (isEditing && (oldCourse.getName().equals(courseName.getText().toString())) && (oldCourse.getColorIndex() == colorId)) {
             finish();
-        } else {
+        }
+        else {
             EditText currentName = (EditText) findViewById(R.id.editCourseTitle);
             if (currentName.getText().length() > 0) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -193,42 +194,49 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                         intent.putExtra(getString(R.string.intent_course_data_receive), course);
                         ArrayList<Course> courses = (ArrayList<Course>) getIntent().getExtras().getSerializable("courseArrayList");
                         Iterator<Course> iter = courses.iterator();
-                        while(iter.hasNext()) {
-                            Course currentCourse = iter.next();
-                            if (currentCourse.getName().equals(course.getName()) && !course.getName().equals(Course.getUnsetCourse().getName())) {
-                                isTheSame = true;
-                            }
-                        }
-                        if(course.getName().equals(Course.getUnsetCourse().getName())) {
-                            isUnset = true;
-                        }
-                        if (isEditing && !isTheSame && !isUnset) {
+                        if (isEditing && oldCourse.getName().equals(courseName.getText().toString()) && oldCourse.getColorIndex()!= colorId) {
                             indexOfOldCourse = getIntent().getExtras().getInt("oldCourseIndex");
                             intent.putExtra("oldCourseIndex", indexOfOldCourse);
-                            intent.putExtra("oldCourse", oldCourse);
                             intent.putExtra("shouldEdit", true);
                             setResult(RESULT_OK, intent);
                             finish();
-                        } else if (isTheSame) {
-                            final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
-                            alert.setMessage("A course with the same name already exists")
-                                    .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int id) {
-                                        }
-                                    }).show();
-                        } else if (isUnset) {
-                            final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
-                            alert.setMessage("A course cannot have the name Unset")
-                                    .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int id) {
-                                        }
-                                    }).show();
-                        }
-                        else {
-                            setResult(RESULT_OK, intent);
-                            finish();
+                        } else {
+                            while (iter.hasNext()) {
+                                Course currentCourse = iter.next();
+                                if (currentCourse.getName().equals(course.getName()) && !course.getName().equals(Course.getUnsetCourse().getName())) {
+                                    isTheSame = true;
+                                }
+                            }
+                            if (course.getName().equals(Course.getUnsetCourse().getName())) {
+                                isUnset = true;
+                            }
+                            if (isEditing && !isTheSame && !isUnset) {
+                                indexOfOldCourse = getIntent().getExtras().getInt("oldCourseIndex");
+                                intent.putExtra("oldCourseIndex", indexOfOldCourse);
+                                intent.putExtra("oldCourse", oldCourse);
+                                intent.putExtra("shouldEdit", true);
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            } else if (isTheSame) {
+                                final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
+                                alert.setMessage("A course with the same name already exists")
+                                        .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                            }
+                                        }).show();
+                            } else if (isUnset) {
+                                final AlertDialog.Builder alert = new AlertDialog.Builder(CourseActivity.this);
+                                alert.setMessage("A course cannot have the name Unset")
+                                        .setPositiveButton(R.string.ok_filter_dialog, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                            }
+                                        }).show();
+                            } else {
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            }
                         }
                     }
                 });
