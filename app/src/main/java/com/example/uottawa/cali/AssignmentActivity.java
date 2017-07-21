@@ -166,39 +166,48 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
         onBackPressed();
     }
 
+    private void incrementAssignmentCount() {
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        int count = sharedPref.getInt("assignmentCount", 0); //0 is default value.
+        count++;
+        SharedPreferences.Editor edit = sharedPref.edit();
+        edit.putInt("assignmentCount", count);
+        edit.commit();
+    }
+
     public void clickComplete(View v) {
         assignment.setName(nameEditText.getText().toString().trim());
         assignment.setDescription(descriptionEditText.getText().toString());
-        Intent intent = new Intent();
-        if (fresh) {
-            intent.putExtra(getString(R.string.intent_assignment_operation), FileOperations.MODIFY);
-            intent.putExtra(getString(R.string.intent_assignment_data_receive), assignment);
-            SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-            int count = sharedPref.getInt("assignmentCount", 0); //0 is default value.
-            count++;
-            SharedPreferences.Editor edit = sharedPref.edit();
-            edit.putInt("assignmentCount", count);
-            edit.commit();
-        } else if (!assignment.equals(assignmentOriginal)) {
-            intent.putExtra(getString(R.string.intent_assignment_operation), FileOperations.MODIFY);
-            intent.putExtra(getString(R.string.intent_assignment_data_receive), assignment);
+        if (fresh || !assignment.equals(assignmentOriginal)) {
+            saveAndClose();
         }  else {
+            Intent intent = new Intent();
             intent.putExtra(getString(R.string.intent_assignment_operation), FileOperations.UNCHANGED);
+            setResult(RESULT_OK, intent);
+            finish();
        }
-        setResult(RESULT_OK, intent);
-        finish();
     }
 
-    @Override
-    public void onBackPressed() {
-        assignment.setName(nameEditText.getText().toString().trim());
-        assignment.setDescription(descriptionEditText.getText().toString());
-        if (fresh) {
+    private void saveAndClose() {
+        if (!assignment.getName().equals("")) {
+            if (fresh) {
+                incrementAssignmentCount();
+            }
             Intent intent = new Intent();
             intent.putExtra(getString(R.string.intent_assignment_operation), FileOperations.MODIFY);
             intent.putExtra(getString(R.string.intent_assignment_data_receive), assignment);
             setResult(RESULT_OK, intent);
             finish();
+        } else {
+            displayWarningEmptyName();
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        assignment.setName(nameEditText.getText().toString().trim());
+        assignment.setDescription(descriptionEditText.getText().toString());
+        if (fresh) {
+            saveAndClose();
         } else if (!assignment.equals(assignmentOriginal)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.title_save_dialog));
@@ -206,12 +215,8 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
             builder.setPositiveButton(getString(R.string.positive_save_dialog), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent();
-                    intent.putExtra(getString(R.string.intent_assignment_operation), FileOperations.MODIFY);
-                    intent.putExtra(getString(R.string.intent_assignment_data_receive), assignment);
-                    setResult(RESULT_OK, intent);
                     dialog.dismiss();
-                    finish();
+                    saveAndClose();
                 }
             });
             builder.setNeutralButton(getString(R.string.cancel_save_dialog), new DialogInterface.OnClickListener() {
@@ -238,6 +243,20 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
             setResult(RESULT_OK, intent);
             finish();
         }
+    }
+
+    public void displayWarningEmptyName() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.title_empty_name_warning));
+        builder.setMessage(getString(R.string.message_empty_name_warning));
+        builder.setPositiveButton(getString(R.string.positive_empty_name_warning), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     public void changeCourse(View v) {

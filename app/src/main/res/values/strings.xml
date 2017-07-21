@@ -101,6 +101,12 @@
 
     <string name="no_assignments_error">Looks, like you don\'t have any assignments. To add a new assignment add press the plus icon in the bottom right.</string>
     <string name="over_filter_error">There are no assignments that match your filtering options</string>
+
+
+    <!--Empty name warning dialog-->
+    <string name="title_empty_name_warning">Missing assignment name</string>
+    <string name="message_empty_name_warning">The assignment name field cannot be left blank</string>
+    <string name="positive_empty_name_warning">OK</string>
     <!--
     <
 

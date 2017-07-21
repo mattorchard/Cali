@@ -393,6 +393,15 @@ public class MainActivity extends IOActivity implements NavigationView.OnNavigat
         coursesFile = new ArrayList<>();
         coursesFile.add(Course.getUnsetCourse());
         assignmentsFile = new ArrayList<>();
+        coursesFile.add(new Course("Example Course", R.color.courseColor1, R.color.courseColor1a));
+        calendar.add(Calendar.HOUR_OF_DAY, 24*7);
+        assignmentsFile.add(new Assignment(coursesFile.get(1), "Example Assignment", 10, calendar.getTime(), 1, AssignmentTypes.UNSET, "This is an example assignment, feel free to delete it and add in your own assignments and courses."));
+    }
+    private void setTestData() {
+        Calendar calendar = Calendar.getInstance();
+        coursesFile = new ArrayList<>();
+        coursesFile.add(Course.getUnsetCourse());
+        assignmentsFile = new ArrayList<>();
         coursesFile.add(new Course("Networking", R.color.courseColor1, R.color.courseColor1a));
         coursesFile.add(new Course("UI Design", R.color.courseColor3, R.color.courseColor3a));
         coursesFile.add(new Course("Quality Assurance", R.color.courseColor5, R.color.courseColor5a));
