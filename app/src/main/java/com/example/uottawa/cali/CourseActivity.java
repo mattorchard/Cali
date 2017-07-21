@@ -79,7 +79,7 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                 else {
                     /*Integer test = colorIndexMap.get(colorId);
                     Toast.makeText(CourseActivity.this, Integer.toString(test), Toast.LENGTH_LONG).show();*/
-                    course = new Course(courseName.getText().toString(), colorId, secondaryColorId);
+                    course = new Course(courseName.getText().toString().trim(), colorId, secondaryColorId);
                     Intent intent = new Intent();
                     intent.putExtra(getString(R.string.intent_course_operation), FileOperations.MODIFY);
                     intent.putExtra(getString(R.string.intent_course_data_receive), course);
@@ -177,7 +177,7 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         EditText courseName = (EditText) findViewById(R.id.editCourseTitle);
-                        course = new Course(courseName.getText().toString(), colorId, secondaryColorId);
+                        course = new Course(courseName.getText().toString().trim(), colorId, secondaryColorId);
                         Intent intent = new Intent();
                         intent.putExtra(getString(R.string.intent_course_operation), FileOperations.MODIFY);
                         intent.putExtra(getString(R.string.intent_course_data_receive), course);
