@@ -75,6 +75,16 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
                 }
                 else if (isEditing && (oldCourse.getName().equals(courseName.getText().toString())) && (oldCourse.getColorIndex() == colorId)) {
                     finish();
+                } else if (isEditing && oldCourse.getName().equals(courseName.getText().toString()) && oldCourse.getColorIndex()!= colorId) {
+                    course = new Course(courseName.getText().toString().trim(), colorId, secondaryColorId);
+                    Intent intent = new Intent();
+                    intent.putExtra(getString(R.string.intent_course_operation), FileOperations.MODIFY);
+                    intent.putExtra(getString(R.string.intent_course_data_receive), course);
+                    indexOfOldCourse = getIntent().getExtras().getInt("oldCourseIndex");
+                    intent.putExtra("oldCourseIndex", indexOfOldCourse);
+                    intent.putExtra("shouldEdit", true);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
                 else {
                     /*Integer test = colorIndexMap.get(colorId);
