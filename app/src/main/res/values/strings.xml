@@ -100,7 +100,7 @@
     <string name="dialog_course_color">Pick a course colour</string>
     <string name="choose_course_secondary_color">Choose the secondary course color</string>
 
-    <string name="no_assignments_error">Looks, like you don\'t have any assignments. To add a new assignment add press the plus icon in the bottom right.</string>
+    <string name="no_assignments_error">Looks like you don\'t have any assignments. To add a new assignment, press the plus icon in the bottom right.</string>
     <string name="over_filter_error">There are no assignments that match your filtering options</string>
 
 
