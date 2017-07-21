@@ -269,7 +269,7 @@ public class CourseActivity extends AppCompatActivity implements EditNameDialogL
     public void createHashMap() {
         colorIndexMap = new HashMap<>();
         colorIndexMap.put(R.color.courseColor1, R.color.courseColor1a);
-        colorIndexMap.put(R.color.courseColor5a, R.color.courseColor5);
+        colorIndexMap.put(R.color.courseColor5, R.color.courseColor5a);
         colorIndexMap.put(R.color.courseColor3, R.color.courseColor3a);
         colorIndexMap.put(R.color.courseColor7, R.color.courseColor7a);
         colorIndexMap.put(R.color.courseColor4, R.color.courseColor4a);
