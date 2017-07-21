@@ -89,6 +89,7 @@
 
     <!--Errors-->
     <string name="error_assignment_parse">Error parsing assignment data</string>
+    <string name="link_dialog_no_url">URL field cannot be empty</string>
 
     <!--Misc-->
     <string name="fresh_assignment_name">New Assignment</string>

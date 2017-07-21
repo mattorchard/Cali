@@ -36,4 +36,12 @@
         android:maxLines="1"
         android:imeOptions="actionDone"/>
 
+    <TextView
+        android:id="@+id/errorTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/link_dialog_no_url"
+        android:textColor="@color/colorAccent"
+        android:visibility="invisible" />
+
 </LinearLayout>

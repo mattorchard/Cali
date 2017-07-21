@@ -290,41 +290,42 @@ public class AssignmentActivity extends AppCompatActivity implements DatePickerD
         //Create a new dialog to take the URL info from the user
         LayoutInflater inflater = LayoutInflater.from(this);
         View dialogView = inflater.inflate(R.layout.link_dialog_layout, null);
-        final EditText urlEditText = (EditText)dialogView.findViewById(R.id.urlEditText);
-        final EditText nameEditText = (EditText)dialogView.findViewById(R.id.nameEditText);
+        final EditText urlEditText = (EditText) dialogView.findViewById(R.id.urlEditText);
+        final EditText nameEditText = (EditText) dialogView.findViewById(R.id.nameEditText);
+        final TextView errorView = (TextView)  dialogView.findViewById(R.id.errorTextView);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add a new link");
         builder.setView(dialogView);
-        AlertDialog alertDialog = builder.create();
+        builder.setPositiveButton("OK", null);
+        builder.setNegativeButton("Cancel", null);
 
-        //When OK is pressed, create a new TextView and place it in the layout
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String url = appendUrlPrefix(urlEditText.getText().toString());
-                String name = nameEditText.getText().toString().replace(" " , "");
-
-                if (name.equals("")) {
-                    name = url;
+            public void onClick(View v) {
+                if (urlEditText.getText().toString().replace(" ", "").equals("")) {
+                    errorView.setVisibility(View.VISIBLE);
                 }
+                else {
+                    String url = appendUrlPrefix(urlEditText.getText().toString().replace(" " , ""));
+                    String name = nameEditText.getText().toString().replace(" " , "");
 
-                NamedLink namedLink = new NamedLink(name, url);
-                TextView urlView = createTextViewFromNamedLink(namedLink);
-                assignment.getNamedLinkList().add(namedLink);
+                    if (name.equals("")) {
+                        name = url;
+                    }
 
-                appendNewTextView(linkLayout, urlView, null, namedLink);
+                    NamedLink namedLink = new NamedLink(name, url);
+                    TextView urlView = createTextViewFromNamedLink(namedLink);
+                    assignment.getNamedLinkList().add(namedLink);
+
+                    appendNewTextView(linkLayout, urlView, null, namedLink);
+                    alertDialog.dismiss();
+                }
             }
         });
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        builder.show();
     }
 
     public void addFile(View v){
